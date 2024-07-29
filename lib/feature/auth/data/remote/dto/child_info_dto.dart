@@ -9,7 +9,7 @@ class ChildInfoDto extends Equatable {
     this.birthdayDate,
   });
 
-  final String message;
+  final String? message;
   final String? userId;
   final String? gender;
   final num? weight;
@@ -17,7 +17,7 @@ class ChildInfoDto extends Equatable {
 
   factory ChildInfoDto.fromJson(Map<String, dynamic> json) {
     return ChildInfoDto(
-      message: json['message'] as String,
+      message: json['message'] as String?,
       userId: json['user_id'] as String?,
       gender: json['gender'] as String?,
       weight: json['weight'] as num?,

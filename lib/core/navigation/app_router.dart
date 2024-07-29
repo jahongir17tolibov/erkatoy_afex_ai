@@ -7,11 +7,16 @@ import 'package:erkatoy_afex_ai/feature/auth/presentation/register/bloc/register
 import 'package:erkatoy_afex_ai/feature/auth/presentation/register/register_screen.dart';
 import 'package:erkatoy_afex_ai/feature/change_lang/bloc/change_lang_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/change_lang/change_lang_screen.dart';
-import 'package:erkatoy_afex_ai/feature/home/presentation/home_screen.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/chat/bloc/chat_bloc.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/chat/chat_screen.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/health/bloc/health_bloc.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/health/health_tips_screen.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/nav_bar/scaffold_with_nav_bar.dart';
 import 'package:erkatoy_afex_ai/feature/settings/settings_screen.dart';
 import 'package:erkatoy_afex_ai/feature/splash/splash_screen.dart';
-import 'package:erkatoy_afex_ai/feature/zen/zen_mode_screen.dart';
+import 'package:erkatoy_afex_ai/feature/zen/presentation/zen_mode_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,13 +25,14 @@ import 'package:go_router/go_router.dart';
 class AppRouter {
   AppRouter._();
 
-  static final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> _sectionNavKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _bottomNavKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> _homeNavKey = GlobalKey<NavigatorState>();
 
   static final GoRouter _router = GoRouter(
     debugLogDiagnostics: true,
     initialLocation: SplashScreen.routeName,
-    navigatorKey: _navigatorKey,
+    navigatorKey: _rootNavigatorKey,
     routes: [
       /// splash
       GoRoute(
@@ -75,28 +81,58 @@ class AppRouter {
         ],
       ),
 
+      GoRoute(
+        path: ZenModeScreen.routePath,
+        name: ZenModeScreen.routeName,
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (context, _) => _materialPage(const ZenModeScreen()),
+      ),
+
       /// home
       StatefulShellRoute.indexedStack(
+        parentNavigatorKey: _rootNavigatorKey,
         builder: (context, _, navShell) => ScaffoldWithNavBar(navigationShell: navShell),
         branches: [
           /// zen
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: ZenModeScreen.routeName,
+                path: ZenModeScreen.routeBottom,
                 builder: (context, _) => const ZenModeScreen(),
-              )
+              ),
             ],
           ),
 
           /// home
           StatefulShellBranch(
-            navigatorKey: _sectionNavKey,
+            navigatorKey: _homeNavKey,
             routes: [
               GoRoute(
                 path: HomeScreen.routeName,
-                builder: (context, _) => const HomeScreen(),
-                routes: [],
+                builder: (context, _) => BlocProvider(
+                  create: (context) => getIt<HomeBloc>(),
+                  child: const HomeScreen(),
+                ),
+                routes: [
+                  GoRoute(
+                    path: ChatScreen.routeName,
+                    name: ChatScreen.routeName,
+                    parentNavigatorKey: _rootNavigatorKey,
+                    pageBuilder: (context, _) => _materialPage(BlocProvider(
+                      create: (context) => getIt<ChatBloc>(),
+                      child: const ChatScreen(),
+                    )),
+                  ),
+                  GoRoute(
+                    path: HealthTipsScreen.routeName,
+                    name: HealthTipsScreen.routeName,
+                    parentNavigatorKey: _rootNavigatorKey,
+                    pageBuilder: (context, _) => _materialPage(BlocProvider(
+                      create: (context) => getIt<HealthBloc>(),
+                      child: const HealthTipsScreen(),
+                    )),
+                  ),
+                ],
               )
             ],
           ),
@@ -118,7 +154,7 @@ class AppRouter {
 
   static GoRouter get router => _router;
 
-  static GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+  static GlobalKey<NavigatorState> get navigatorKey => _rootNavigatorKey;
 
   static Page<dynamic> _materialPage(Widget screen) => MaterialPage(child: screen);
 

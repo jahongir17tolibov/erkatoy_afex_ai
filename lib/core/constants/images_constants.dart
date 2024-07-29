@@ -11,4 +11,5 @@ class ImagesConstants {
   static const String voiceIconSvg = 'assets/images/svg/voice_icon.svg';
   static const String noConnectionPng = 'assets/images/png/no_internet_icon.png';
   static const String zendModeIconPng = 'assets/images/png/zen_mode_icon.png';
+  static const String afexAiLogoPng = 'assets/images/png/afex_ai_logo.png';
 }

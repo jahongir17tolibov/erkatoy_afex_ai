@@ -6,9 +6,11 @@ import 'package:erkatoy_afex_ai/design_system/components/phone_input.dart';
 import 'package:erkatoy_afex_ai/design_system/components/single_child_scroll_with_size.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
+import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/creating_account_screen.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/login/bloc/login_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/login/widget/login_button.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/login/widget/login_password_input.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -46,13 +48,13 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state.status == LoginStatus.onShowMessage) {
             context.showSnackBar(state.message!);
           } else if (state.status == LoginStatus.onSuccessful) {
-            // CreatingAccountScreen.open(context);
+            HomeScreen.open(context);
           }
 
           if (state.onLoading != null) {
             state.onLoading!
-                ? AdaptiveLoadingView.show(context)
-                : AdaptiveLoadingView.hide(context);
+                ? AdaptiveLoadingView.showLoadingDialog(context)
+                : AdaptiveLoadingView.hideLoadingDialog(context);
           }
         },
         child: SingleChildScrollWithSize(
@@ -76,6 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 getHeightSize20,
                 LoginButton(onPressed: () {
+                  // CreatingAccountScreen.open(context, phone: _phoneEditingController.text, pass: _passwordEditingController.text);
                   if (validationState) {
                     context.read<LoginBloc>().add(OnLoginBtnPressedEvent(
                           phoneNumber: _phoneEditingController.text,

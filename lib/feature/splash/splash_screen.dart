@@ -1,8 +1,12 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/connectivity/connectivity_cubit.dart';
+import 'package:erkatoy_afex_ai/core/constants/hive_constants.dart';
+import 'package:erkatoy_afex_ai/core/provider/local/hive_local_storage.dart';
 import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
+import 'package:erkatoy_afex_ai/di.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/register/register_screen.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,7 +23,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2), () {
-      RegisterScreen.open(context);
+      getAuthToken().then((value) {
+        value == null ? RegisterScreen.open(context) : HomeScreen.open(context);
+      });
       context.read<ConnectivityCubit>().observeConnectivity();
     });
     super.initState();
@@ -63,5 +69,10 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       // ),
     );
+  }
+
+  Future<String?> getAuthToken() async {
+    return await getIt<HiveLocalStorage>()
+        .getString(boxName: HiveConstants.authTokenBoxName, key: HiveConstants.authTokenKey);
   }
 }

@@ -21,14 +21,14 @@ class ChangeBirthDate extends StatelessWidget {
               child: BirthDatePicker(
                 initialDate: changedDate ?? DateTime.now(),
                 onDateTimeChanged: (newDate) {
-                  context.read<CreateAccountBloc>().add(OnChangeBirthDayDateAuthEvent(newDate));
+                  context.read<CreateAccountBloc>().add(OnChangeBirthDayDateCreateAccEvent(newDate));
                 },
               ),
             );
           },
           buttonWidth: 1.screenWidth(context),
           buttonHeight: 48,
-          text: changedDate == null ? 'Tug`ilgan sanasi' : dateTimeFormat(changedDate),
+          text: changedDate == null ? 'Tug`ilgan sanasi' : normalDateTimeFormat(changedDate),
           textColor: context.themeColors.onSurface.withOpacity(changedDate == null ? 0.7 : 1.0),
           textSize: 16.textSize(context),
           removeSplash: true,

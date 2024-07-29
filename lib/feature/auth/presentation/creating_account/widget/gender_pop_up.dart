@@ -34,7 +34,7 @@ class GenderPopUp extends StatelessWidget {
                       child: TextView(text: value, textColor: context.themeColors.onSurface)))
                   .toList(),
               onChanged: (value) {
-                context.read<CreateAccountBloc>().add(OnSelectGenderAuthEvent(value!));
+                context.read<CreateAccountBloc>().add(OnSelectGenderCreateAccEvent(value!));
               },
             ),
           ),

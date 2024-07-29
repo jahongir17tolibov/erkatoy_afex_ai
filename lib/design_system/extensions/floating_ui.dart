@@ -28,6 +28,7 @@ extension FloatingUi on BuildContext {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
+          duration: const Duration(milliseconds: 400),
           content: TextView(
             text: message,
             textColor: onError ? themeColors.onError : themeColors.onPrimary,
@@ -50,9 +51,10 @@ extension FloatingUi on BuildContext {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
+          duration: const Duration(seconds: 1),
           content: TextView(text: message, textColor: themeColors.surface),
-          shape: RoundedRectangleBorder(borderRadius: getBorderAll12),
-          padding: getPaddingAll8,
+          margin: getPaddingAll8,
+          behavior: SnackBarBehavior.floating,
         ),
       );
   }

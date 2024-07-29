@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:erkatoy_afex_ai/core/provider/remote/api_client.dart';
 import 'package:erkatoy_afex_ai/core/provider/remote/dio_exception_handler.dart';
@@ -50,16 +52,21 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
   }
 
   @override
-  Future<ChildInfoDto> sendBabysInfo({
+  Future<ChildInfoDto> sendChildInfo({
     required String birthDayDate,
     required String gender,
     required double weight,
+    required String bearerToken,
   }) async {
     ChildInfoDto childInfo;
     try {
       childInfo = await _apiClient.getDio.post(
         'child_info',
-        options: _apiClient.postOptions,
+        options: Options(headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $bearerToken',
+        }),
         data: {
           'birthday': birthDayDate,
           'gender': gender,

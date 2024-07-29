@@ -1,12 +1,13 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
+import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:flutter/material.dart';
 
-final _myKey = GlobalKey();
-
 class AdaptiveLoadingView extends StatelessWidget {
-  const AdaptiveLoadingView({super.key});
+  const AdaptiveLoadingView({super.key, this.color});
 
-  static void show(BuildContext context) {
+  final Color? color;
+
+  static void showLoadingDialog(BuildContext context) {
     showAdaptiveDialog(
       context: context,
       useSafeArea: true,
@@ -19,7 +20,7 @@ class AdaptiveLoadingView extends StatelessWidget {
     );
   }
 
-  static void hide(BuildContext context) {
+  static void hideLoadingDialog(BuildContext context) {
     if (Navigator.of(context).canPop()) {
       Navigator.pop(context);
     }
@@ -28,8 +29,11 @@ class AdaptiveLoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(strokeCap: StrokeCap.round),
+    return Center(
+      child: CircularProgressIndicator.adaptive(
+        // backgroundColor: color ?? context.themeColors.primary,
+        strokeCap: StrokeCap.round,
+      ),
     );
   }
 }

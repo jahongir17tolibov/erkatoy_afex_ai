@@ -28,6 +28,7 @@ EdgeInsets get getPaddingAll4 => const EdgeInsets.all(4);
 EdgeInsets get getPaddingAll6 => const EdgeInsets.all(6);
 EdgeInsets get getPaddingAll8 => const EdgeInsets.all(8);
 EdgeInsets get getPaddingAll10 => const EdgeInsets.all(10);
+EdgeInsets get getPaddingAll12 => const EdgeInsets.all(12);
 EdgeInsets get getPaddingAll16 => const EdgeInsets.all(16);
 EdgeInsets get getPaddingAll20 => const EdgeInsets.all(20);
 // EdgeInsets get symmetric => const EdgeInsets.symmetric(horizontal: );
@@ -46,9 +47,9 @@ BorderRadius getCustomBorder(double radius) => BorderRadius.circular(radius);
 /// dividers
 Widget get getDivider => const Divider(color: Colors.grey);
 Widget get getOpacityDivider => Divider(color: Colors.grey.withOpacity(0.5));
+Widget getOnSurfaceDivider(BuildContext context) =>  Divider(color: context.themeColors.onSurface);
 
-
-String dateTimeFormat(DateTime dateTime) {
+String normalDateTimeFormat(DateTime dateTime) {
   String day = dateTime.day.toString().length == 1 ? '0${dateTime.day}' : dateTime.day.toString();
   String month =
   dateTime.month.toString().length == 1 ? '0${dateTime.month}' : dateTime.month.toString();

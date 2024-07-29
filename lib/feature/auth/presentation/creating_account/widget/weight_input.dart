@@ -18,6 +18,7 @@ class WeightInput extends StatelessWidget {
         controller: controller,
         textInputType: const TextInputType.numberWithOptions(decimal: true),
         removeBorders: true,
+        inputActionIsNext: false,
       ),
     );
   }

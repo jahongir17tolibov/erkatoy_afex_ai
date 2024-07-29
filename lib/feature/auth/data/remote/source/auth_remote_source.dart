@@ -5,9 +5,10 @@ abstract interface class AuthRemoteSource {
 
   Future<AuthResponse> registerUser({required String phone, required String password});
 
-  Future<ChildInfoDto> sendBabysInfo({
+  Future<ChildInfoDto> sendChildInfo({
     required String birthDayDate,
     required String gender,
     required double weight,
+    required String bearerToken,
   });
 }

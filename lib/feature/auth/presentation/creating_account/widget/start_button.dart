@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StartButton extends StatelessWidget {
-  const StartButton({super.key});
+  const StartButton({super.key, required this.phone, required this.pass});
+
+  final String phone;
+  final String pass;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,13 @@ class StartButton extends StatelessWidget {
         final bool buttonState =
             state.weight.isNotEmpty && (state.gender != null) && (state.birthdayDate != null);
         return ErkatoyButton(
-          onPressed: buttonState ? () {} : null,
+          onPressed: buttonState
+              ? () {
+                  context
+                      .read<CreateAccountBloc>()
+                      .add(OnStartButtonPressedCreateAccEvent(phone, pass));
+                }
+              : null,
           text: 'Boshlash',
           buttonHeight: 48,
           textColor: context.themeColors.onPrimary,

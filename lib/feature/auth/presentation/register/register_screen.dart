@@ -8,7 +8,6 @@ import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/creating_account_screen.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/register/widget/already_signed_text_button.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/register/widget/reenter_password_input.dart';
-import 'package:erkatoy_afex_ai/feature/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -69,8 +68,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
           if (state.onLoading != null) {
             state.onLoading!
-                ? AdaptiveLoadingView.show(context)
-                : AdaptiveLoadingView.hide(context);
+                ? AdaptiveLoadingView.showLoadingDialog(context)
+                : AdaptiveLoadingView.hideLoadingDialog(context);
           }
         },
         child: SingleChildScrollWithSize(
@@ -104,13 +103,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 getHeightSize20,
                 RegisterButton(onPressed: () {
-                  HomeScreen.open(context);
-                  // if (validationState) {
-                  //   context.read<RegisterBloc>().add(OnRegisterBtnPressedEvent(
-                  //         phoneNumber: _phoneEditingController.text,
-                  //         password: _passwordEditingController.text,
-                  //       ));
-                  // }
+                  // HomeScreen.open(context);
+                  // CreatingAccountScreen.open(
+                  //   context,
+                  //   phone: _phoneEditingController.text,
+                  //   pass: _passwordEditingController.text,
+                  // );
+                  if (validationState) {
+                    context.read<RegisterBloc>().add(OnRegisterBtnPressedEvent(
+                          phoneNumber: _phoneEditingController.text,
+                          password: _passwordEditingController.text,
+                        ));
+                  }
                 }),
                 getHeightSize8,
                 const AlreadySignedTextButton(),
