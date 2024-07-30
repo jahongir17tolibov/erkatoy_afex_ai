@@ -48,7 +48,7 @@ class _HealthTipsScreenState extends State<HealthTipsScreen> {
                   children: <Widget>[
                     TextView.boldStyle(
                       text: "Bolalarda uchrashi mumkin bo'lgan kasalliklar",
-                      textSize: 24.textSize(context),
+                      textSize: 20.textSize(context),
                       textColor: context.themeColors.onSurface,
                     ),
                     getHeightSize16,

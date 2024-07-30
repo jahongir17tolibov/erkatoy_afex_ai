@@ -1,8 +1,8 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
-import 'package:erkatoy_afex_ai/core/connectivity/connectivity_cubit.dart';
 import 'package:erkatoy_afex_ai/core/constants/hive_constants.dart';
+import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/core/provider/local/hive_local_storage.dart';
-import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
+import 'package:erkatoy_afex_ai/core/service/connectivity/connectivity_cubit.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/di.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/register/register_screen.dart';
@@ -36,16 +36,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body:
           // BlocListener<ConnectivityCubit, ConnectivityState>(
-          //   listener: (context, state) async {
-          //     if (state.status == ConnectivityStatus.connectionFailed) {
-          //       await context.showConnectivityDialog().whenComplete(() {
-          //         context.read<ConnectivityCubit>().onDialogOpen(true);
-          //       });
-          //     } else if (state.status == ConnectivityStatus.connectionRestored) {
-          //       if (state.isDialogShows) {
-          //         Navigator.pop(context);
-          //         context.read<ConnectivityCubit>().onDialogOpen(false);
-          //       }
+          //   listener: (context, state) {
+          //     printOnDebug(state.isDialogShows);
+          //     if (state.isDialogShows != null) {
+          //       state.isDialogShows! ? context.showConnectivityDialog() : Navigator.pop(context);
           //     }
           //   },
           //   child:
@@ -56,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             getFullWidth(context),
-            TextView(text: 'Splash screen', textSize: 30.textSize(context)),
+            Image.asset(ImagesConstants.appLogo, width: 500, height: 500, fit: BoxFit.cover),
             SizedBox(
               width: 0.5.screenWidth(context),
               child: LinearProgressIndicator(

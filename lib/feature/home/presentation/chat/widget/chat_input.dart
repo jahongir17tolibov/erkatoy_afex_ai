@@ -1,5 +1,7 @@
+import 'package:erkatoy_afex_ai/core/base/base_extensions.dart';
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/design_system/components/google_font_style.dart';
+import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/bloc/chat_bloc.dart';
 import 'package:flutter/material.dart';
@@ -42,10 +44,14 @@ class ChatInput extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              if (controller.text.isNotEmpty) {
-                focusNode.unfocus();
-                context.read<ChatBloc>().add(OnRequestToAiChatEvent(message: controller.text));
-                controller.clear();
+              if (context.getConnectivity) {
+                if (controller.text.isNotEmpty) {
+                  focusNode.unfocus();
+                  context.read<ChatBloc>().add(OnRequestToAiChatEvent(message: controller.text));
+                  controller.clear();
+                }
+              } else {
+                context.showSnackBar('Internet bilan aloqa yo`q!');
               }
             },
             style: IconButton.styleFrom(backgroundColor: context.themeColors.surface),

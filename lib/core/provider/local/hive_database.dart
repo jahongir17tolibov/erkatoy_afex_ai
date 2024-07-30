@@ -6,6 +6,7 @@ class HiveDatabase {
   static Future<void> init() async {
     await Hive.initFlutter();
     await Hive.openBox(HiveConstants.authTokenBoxName);
+    await Hive.openBox(HiveConstants.settingsBoxName);
 
     Hive.registerAdapter(ChatEntityAdapter());
     await Hive.openBox<ChatEntity>(HiveConstants.chatAdapterBoxName);

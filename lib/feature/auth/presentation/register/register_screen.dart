@@ -59,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           if (state.status == RegisterStatus.onShowMessage) {
             context.showSnackBar(state.message!);
           } else if (state.status == RegisterStatus.onSuccessful) {
-            CreatingAccountScreen.open(
+            CreatingAccountScreen.openReplace(
               context,
               phone: _phoneEditingController.text,
               pass: _passwordEditingController.text,

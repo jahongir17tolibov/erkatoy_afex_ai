@@ -5,11 +5,11 @@ enum ConnectivityStatus { pure, connectionFailed, connectionRestored }
 class ConnectivityState extends Equatable {
   const ConnectivityState({
     this.status = ConnectivityStatus.pure,
-    this.isDialogShows = false,
+    this.isDialogShows,
   });
 
   final ConnectivityStatus status;
-  final bool isDialogShows;
+  final bool? isDialogShows;
 
   ConnectivityState copyWith({
     ConnectivityStatus? status,

@@ -1,3 +1,5 @@
+import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
+
 class AllActivitiesDto {
   AllActivitiesDto({this.events, this.message, this.detail});
 

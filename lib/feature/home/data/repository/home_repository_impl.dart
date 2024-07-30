@@ -1,9 +1,14 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:erkatoy_afex_ai/feature/home/data/local/home_local_source.dart';
 import 'package:erkatoy_afex_ai/feature/home/data/remote/dto/health_dto.dart';
 import 'package:erkatoy_afex_ai/feature/home/data/remote/source/home_remote_source_impl.dart';
 import 'package:erkatoy_afex_ai/feature/home/data/repository/mapper/home_mapper.dart';
+import 'package:erkatoy_afex_ai/feature/home/domain/entity/activity_schedule.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/entity/chat.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/repository/home_repository.dart';
+import 'package:flutter/cupertino.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl({
@@ -19,7 +24,7 @@ class HomeRepositoryImpl implements HomeRepository {
     return _remoteSource.getAllActivitiesResponse().then((data) {
       if (data.detail == null) {
         final activities = data.events!.entries.map((entry) {
-          return '${entry.key} - ${entry.value}';
+          return ActivitySchedule(time: entry.key, activity: entry.value);
         }).toList();
         return AllActivitiesResult(data: activities);
       }
@@ -64,6 +69,27 @@ class HomeRepositoryImpl implements HomeRepository {
 
   @override
   Future<String> requestToAiChat(String request) async {
-    return await _remoteSource.requestChatAi(request, "+998909001755");
+    return await _remoteSource.requestChatAi(request);
+  }
+
+  @override
+  Future<CryReasonResult> getCryReasonWithAudio(File file) async {
+    return await _remoteSource.uploadAudioToFirebaseStorage(file).then((result) async {
+      if (result.errorMessage == null) {
+        return getCryReasonFromApi(result.data!);
+      }
+      return CryReasonResult(errorMessage: result.errorMessage);
+    });
+  }
+
+  @override
+  @protected
+  Future<CryReasonResult> getCryReasonFromApi(String audioUrl) {
+    return _remoteSource.getCryReason(audioUrl).then((apiResult) {
+      if (apiResult.detail == null) {
+        return CryReasonResult(data: apiResult.result);
+      }
+      return CryReasonResult(errorMessage: apiResult.detail!);
+    });
   }
 }

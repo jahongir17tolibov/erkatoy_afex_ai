@@ -31,7 +31,7 @@ class ChatContainer extends StatelessWidget {
                 padding: getPaddingAll12,
                 decoration: BoxDecoration(
                   color: isUser
-                      ? context.themeColors.onSecondary.withOpacity(0.2)
+                      ? context.themeColors.onSurface.withOpacity(0.2)
                       : context.themeColors.secondary,
                   borderRadius: getBorderAll16,
                 ),

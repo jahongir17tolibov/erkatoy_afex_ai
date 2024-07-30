@@ -15,7 +15,7 @@ class HealthRichText extends StatelessWidget {
         text: '$leftText: ',
         style: googleFontStyle(
           fontColor: context.themeColors.onSecondary,
-          fontSize: 14.textSize(context),
+          fontSize: 16.textSize(context),
           fontWeight: FontWeight.w500,
         ),
         children: <TextSpan>[
@@ -23,7 +23,7 @@ class HealthRichText extends StatelessWidget {
             text: rightText,
             style: googleFontStyle(
               fontColor: context.themeColors.onSecondary,
-              fontSize: 14.textSize(context),
+              fontSize: 16.textSize(context),
             ),
           )
         ],

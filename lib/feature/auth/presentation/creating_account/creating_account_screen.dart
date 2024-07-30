@@ -10,7 +10,6 @@ import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/widge
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 import 'bloc/create_account_bloc.dart';
@@ -26,9 +25,14 @@ class CreatingAccountScreen extends StatefulWidget {
 
   static const String routePath = 'creating_account/:phone/:pass';
   static const String routeName = 'creating_account';
+  static const String settingsRouteName = 'update_child_info';
 
-  static void open(BuildContext context, {required String phone, required String pass}) {
+  static void openReplace(BuildContext context, {required String phone, required String pass}) {
     context.pushReplacementNamed(routeName, pathParameters: {'phone': phone, 'pass': pass});
+  }
+
+  static void openPush(BuildContext context) {
+    context.pushNamed(settingsRouteName);
   }
 
   @override
@@ -38,7 +42,6 @@ class CreatingAccountScreen extends StatefulWidget {
 class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
   final GlobalKey<FormState> _weightFormKey = GlobalKey<FormState>();
   final _weightEditingController = TextEditingController();
-  late double statusBarHeight;
 
   @override
   void initState() {
@@ -51,9 +54,12 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    statusBarHeight = MediaQuery.of(context).viewPadding.top;
     return Scaffold(
-      appBar: const DefaultAppBar(titleText: 'Erkatoy', centerTitle: true),
+      appBar: DefaultAppBar(
+        titleText: '',
+        centerTitle: true,
+        backButtonEnabled: widget.phone.isEmpty,
+      ),
       body: BlocListener<CreateAccountBloc, CreateAccountState>(
         listener: (context, state) {
           if (state.status == CreateAccountStatus.onShowMessage) {
@@ -97,7 +103,7 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
               //     ),
               //   ),
               // ),
-              SizedBox(height: 0.1.screenHeight(context)),
+              Image.asset(ImagesConstants.appLogo, fit: BoxFit.cover, width: 1.screenWidth(context), height: 200),
               TextView(
                 text: 'Xush kelibsiz!',
                 textSize: 32.textSize(context),
@@ -118,7 +124,8 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     TextView(
-                      text: "Ro`yxatdan o`tishni yakunlash uchun\nFarzandingiz ma'lumotlarini kiriting",
+                      text:
+                          "Ro`yxatdan o`tishni yakunlash uchun\nFarzandingiz ma'lumotlarini kiriting",
                       textSize: 16.textSize(context),
                       textColor: context.themeColors.onSecondary,
                       fontWeight: FontWeight.w500,

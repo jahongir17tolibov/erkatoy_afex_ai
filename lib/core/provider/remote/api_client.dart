@@ -28,6 +28,15 @@ class ApiClient {
     'Accept': 'application/json',
   };
 
+  FutureOr<Options> _postWithBearer() async {
+    final bearer = await _getBearerToken();
+    return Options(headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $bearer',
+    });
+  }
+
   FutureOr<Options> _getOptions() async {
     final bearer = await _getBearerToken();
     printOnDebug('apiclient: $bearer');
@@ -38,10 +47,11 @@ class ApiClient {
   }
 
   Future<String?> _getBearerToken() => _localStorage.getString(
-    boxName: HiveConstants.authTokenBoxName,
-    key: HiveConstants.authTokenKey,
-  );
+        boxName: HiveConstants.authTokenBoxName,
+        key: HiveConstants.authTokenKey,
+      );
 
   Options get postOptions => _postOptions();
   FutureOr<Options> get getOptions => _getOptions();
+  FutureOr<Options> get postOptionsWithBearer => _postWithBearer();
 }

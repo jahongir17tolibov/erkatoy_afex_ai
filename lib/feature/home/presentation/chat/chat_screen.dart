@@ -1,8 +1,7 @@
-import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
-import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_app_bar.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_input.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_list_view.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -40,6 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const ChatListView(),
+          const ChatLoading(),
           ChatInput(controller: _chatEditingController, focusNode: _chatFocusNode),
         ],
       ),

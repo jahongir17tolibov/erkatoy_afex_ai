@@ -1,4 +1,4 @@
-import 'package:erkatoy_afex_ai/core/connectivity/connectivity_cubit.dart';
+import 'package:erkatoy_afex_ai/core/service/connectivity/connectivity_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

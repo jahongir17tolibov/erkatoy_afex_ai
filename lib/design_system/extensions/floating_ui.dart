@@ -51,6 +51,7 @@ extension FloatingUi on BuildContext {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
+          backgroundColor: themeColors.onSurface.withOpacity(0.9),
           duration: const Duration(seconds: 1),
           content: TextView(text: message, textColor: themeColors.surface),
           margin: getPaddingAll8,

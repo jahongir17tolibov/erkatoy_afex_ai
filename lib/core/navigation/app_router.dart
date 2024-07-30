@@ -9,12 +9,14 @@ import 'package:erkatoy_afex_ai/feature/change_lang/bloc/change_lang_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/change_lang/change_lang_screen.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/bloc/chat_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/chat_screen.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/bloc/daily_schedule_bloc.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/daily_schedule_screen.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/health/bloc/health_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/health/health_tips_screen.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/nav_bar/scaffold_with_nav_bar.dart';
-import 'package:erkatoy_afex_ai/feature/settings/settings_screen.dart';
+import 'package:erkatoy_afex_ai/feature/settings/presentation/settings_screen.dart';
 import 'package:erkatoy_afex_ai/feature/splash/splash_screen.dart';
 import 'package:erkatoy_afex_ai/feature/zen/presentation/zen_mode_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,7 +45,7 @@ class AppRouter {
             path: ChangeLangScreen.routeName,
             name: ChangeLangScreen.routeName,
             pageBuilder: (context, _) => _materialPage(BlocProvider(
-              create: (context) => getIt<ChangeLangBloc>(),
+              create: (_) => getIt<ChangeLangBloc>(),
               child: const ChangeLangScreen(),
             )),
           ),
@@ -54,7 +56,7 @@ class AppRouter {
       GoRoute(
         path: RegisterScreen.routeName,
         pageBuilder: (context, _) => _cupertinoPage(BlocProvider(
-          create: (context) => getIt<RegisterBloc>(),
+          create: (_) => getIt<RegisterBloc>(),
           child: const RegisterScreen(),
         )),
         routes: [
@@ -62,7 +64,7 @@ class AppRouter {
             path: LoginScreen.routeName,
             name: LoginScreen.routeName,
             pageBuilder: (context, _) => _cupertinoPage(BlocProvider(
-              create: (context) => getIt<LoginBloc>(),
+              create: (_) => getIt<LoginBloc>(),
               child: const LoginScreen(),
             )),
           ),
@@ -73,8 +75,8 @@ class AppRouter {
               final phone = state.pathParameters['phone'];
               final password = state.pathParameters['pass'];
               return _cupertinoPage(BlocProvider(
-                create: (context) => getIt<CreateAccountBloc>(),
-                child: CreatingAccountScreen(phone: phone!, password: password!),
+                create: (_) => getIt<CreateAccountBloc>(),
+                child: CreatingAccountScreen(phone: phone ?? '', password: password ?? ''),
               ));
             },
           ),
@@ -110,7 +112,7 @@ class AppRouter {
               GoRoute(
                 path: HomeScreen.routeName,
                 builder: (context, _) => BlocProvider(
-                  create: (context) => getIt<HomeBloc>(),
+                  create: (_) => getIt<HomeBloc>(),
                   child: const HomeScreen(),
                 ),
                 routes: [
@@ -119,7 +121,7 @@ class AppRouter {
                     name: ChatScreen.routeName,
                     parentNavigatorKey: _rootNavigatorKey,
                     pageBuilder: (context, _) => _materialPage(BlocProvider(
-                      create: (context) => getIt<ChatBloc>(),
+                      create: (_) => getIt<ChatBloc>(),
                       child: const ChatScreen(),
                     )),
                   ),
@@ -128,9 +130,21 @@ class AppRouter {
                     name: HealthTipsScreen.routeName,
                     parentNavigatorKey: _rootNavigatorKey,
                     pageBuilder: (context, _) => _materialPage(BlocProvider(
-                      create: (context) => getIt<HealthBloc>(),
+                      create: (_) => getIt<HealthBloc>(),
                       child: const HealthTipsScreen(),
                     )),
+                  ),
+                  GoRoute(
+                    path: DailyScheduleScreen.routePath,
+                    name: DailyScheduleScreen.routeName,
+                    parentNavigatorKey: _rootNavigatorKey,
+                    pageBuilder: (context, state) {
+                      final currentTime = state.pathParameters['current_time'];
+                      return _materialPage(BlocProvider(
+                        create: (_) => getIt<DailyScheduleBloc>(),
+                        child: DailyScheduleScreen(currentTime: currentTime!),
+                      ));
+                    },
                   ),
                 ],
               )
@@ -141,10 +155,21 @@ class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: SettingsScreen.routeName,
-                builder: (context, _) => const SettingsScreen(),
-                routes: [],
-              )
+                  path: SettingsScreen.routeName,
+                  builder: (context, _) => const SettingsScreen(),
+                  routes: [
+                    GoRoute(
+                      path: CreatingAccountScreen.settingsRouteName,
+                      name: CreatingAccountScreen.settingsRouteName,
+                      parentNavigatorKey: _rootNavigatorKey,
+                      pageBuilder: (context, _) {
+                        return _cupertinoPage(BlocProvider(
+                          create: (_) => getIt<CreateAccountBloc>(),
+                          child: const CreatingAccountScreen(phone: '', password: ''),
+                        ));
+                      },
+                    ),
+                  ])
             ],
           )
         ],

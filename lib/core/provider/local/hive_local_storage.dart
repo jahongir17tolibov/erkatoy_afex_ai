@@ -6,9 +6,9 @@ class HiveLocalStorage {
   Future<void> saveBool({required String boxName, required String key, required bool value}) =>
       _getBox(boxName).put(key, value);
 
-  Future<bool> getBool({required String boxName, required String key}) async {
+  Future<bool?> getBool({required String boxName, required String key}) async {
     final bool? value = await _getBox(boxName).get(key);
-    return value ?? false;
+    return value;
   }
 
   Future<void> deleteBool({required String boxName, required String key}) =>

@@ -7,5 +7,9 @@ abstract interface class HomeRemoteSource {
 
   Future<CurrentActivityDto> getCurrentActivityResponse();
 
-  Future<String> requestChatAi(String request, String userId);
+  Future<String> requestChatAi(String request);
+
+  Future<Result<String>> uploadAudioToFirebaseStorage(File file);
+
+  Future<CryClassifyDto> getCryReason(String audioUrl);
 }

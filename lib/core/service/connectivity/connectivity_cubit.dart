@@ -14,19 +14,25 @@ class ConnectivityCubit extends Cubit<ConnectivityState> {
 
   Connectivity get _connectivity => Connectivity();
 
-  void onDialogOpen(bool isDialogOpen) {
-    emit(state.copyWith(isDialogShows: isDialogOpen));
-  }
-
   void observeConnectivity() {
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen((result) {
       emit(state.copyWith(
-        status: result.last == ConnectivityResult.none
-            ? ConnectivityStatus.connectionFailed
-            : ConnectivityStatus.connectionRestored,
-      ));
-      printOnDebug("on cubit: ${state.status}");
+          status: result.last == ConnectivityResult.none
+              ? ConnectivityStatus.connectionFailed
+              : ConnectivityStatus.connectionRestored));
+      _connectivityDialogStatus(result.last == ConnectivityResult.none);
     });
+  }
+
+  void _connectivityDialogStatus(bool noConnection) {
+    if (noConnection) {
+      emit(state.copyWith(isDialogShows: true));
+    } else if (state.isDialogShows != null) {
+      if (!noConnection && state.isDialogShows! == true) {
+        emit(state.copyWith(isDialogShows: false));
+        emit(state.copyWith(isDialogShows: null));
+      }
+    }
   }
 
   @override

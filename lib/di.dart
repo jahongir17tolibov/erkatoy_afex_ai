@@ -20,12 +20,15 @@ import 'package:erkatoy_afex_ai/feature/home/domain/use_case/get_health_tips_use
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/request_to_ai_chat_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/save_chat_to_db_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/bloc/chat_bloc.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/bloc/daily_schedule_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/health/bloc/health_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 
-import 'core/connectivity/connectivity_cubit.dart';
 import 'core/provider/local/hive_local_storage.dart';
+import 'core/service/connectivity/connectivity_cubit.dart';
+import 'feature/home/domain/use_case/get_cry_reason_with_audio_use_case.dart';
+import 'feature/settings/presentation/bloc/settings_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -79,14 +82,23 @@ Future<void> configureDependencies() async {
         () => GetCachedChatsUseCase(repository: getIt<HomeRepository>()))
     ..registerFactory<RequestToAiChatUseCase>(
         () => RequestToAiChatUseCase(repository: getIt<HomeRepository>()))
+    ..registerFactory<GetCryReasonWithAudioUseCase>(
+        () => GetCryReasonWithAudioUseCase(repository: getIt<HomeRepository>()))
     //
-    ..registerFactory<HomeBloc>(
-        () => HomeBloc(getCurrentActivityUseCase: getIt<GetCurrentActivityUseCase>()))
+    ..registerFactory<HomeBloc>(() => HomeBloc(
+          getCurrentActivityUseCase: getIt<GetCurrentActivityUseCase>(),
+          getCryReasonWithAudioUseCase: getIt<GetCryReasonWithAudioUseCase>(),
+        ))
     ..registerFactory<ChatBloc>(() => ChatBloc(
           getCachedChatsUseCase: getIt<GetCachedChatsUseCase>(),
           saveChatToDbUseCase: getIt<SaveChatToDbUseCase>(),
           requestToAiChatUseCase: getIt<RequestToAiChatUseCase>(),
         ))
+    ..registerFactory<DailyScheduleBloc>(
+        () => DailyScheduleBloc(getAllActivitiesUseCase: getIt<GetAllActivitiesUseCase>()))
     ..registerFactory<HealthBloc>(
-        () => HealthBloc(getHealthTipsUseCase: getIt<GetHealthTipsUseCase>()));
+        () => HealthBloc(getHealthTipsUseCase: getIt<GetHealthTipsUseCase>()))
+
+    /// settings
+    ..registerFactory<SettingsBloc>(() => SettingsBloc(localStorage: getIt<HiveLocalStorage>()));
 }

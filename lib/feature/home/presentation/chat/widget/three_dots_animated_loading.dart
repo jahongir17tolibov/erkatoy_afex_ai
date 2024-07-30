@@ -11,23 +11,56 @@ class ThreeDotsAnimatedLoading extends StatefulWidget {
 
 class _ThreeDotsAnimatedLoadingState extends State<ThreeDotsAnimatedLoading>
     with SingleTickerProviderStateMixin {
-  final double beginTweenValue = 0.0;
-  final double endTweenValue = 8.0;
+  late final AnimationController _controller;
+  late List<Animation<double>> _animations;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    )..repeat(reverse: true);
+
+    _animations = List.generate(3, (index) {
+      final start = index / 3;
+      final end = (index + 1) / 3;
+
+      return Tween<double>(begin: 1, end: 1.2).animate(
+        CurvedAnimation(
+          parent: _controller,
+          curve: Interval(start, end, curve: Curves.easeInOut),
+        ),
+      );
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TweenAnimationBuilder(
-      duration: const Duration(milliseconds: 200),
-      tween: Tween(begin: beginTweenValue, end: endTweenValue),
-      curve: Curves.fastLinearToSlowEaseIn,
-      builder: (context, value, child) => Container(
-        width: 12,
-        height: 12,
-        decoration: BoxDecoration(
-          color: context.themeColors.onSecondary,
-          borderRadius: getBorderAll12,
-        ),
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        ...List.generate(3, (index) {
+          return ScaleTransition(
+            scale: _animations[index],
+            child: Container(
+              width: 8,
+              height: 8,
+              margin: getPaddingAll4,
+              decoration: BoxDecoration(
+                color: context.themeColors.onSecondary,
+                shape: BoxShape.circle,
+              ),
+            ),
+          );
+        }),
+      ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

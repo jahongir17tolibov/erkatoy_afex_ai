@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 
 class CurrentActivityDto extends Equatable {
   const CurrentActivityDto({this.time, this.activity, this.message, this.detail});
