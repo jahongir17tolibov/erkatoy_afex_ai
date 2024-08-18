@@ -9,3 +9,5 @@ final class OnSwitchAppThemeSettingsEvent extends SettingsEvent {}
 final class OnSwitchNotificationSettingsEvent extends SettingsEvent {}
 
 final class OnContactToDeveloperSettingsEvent extends SettingsEvent {}
+
+final class OnLogOutUserSettingEvent extends SettingsEvent {}

@@ -44,8 +44,8 @@ class _ThreeDotsAnimatedLoadingState extends State<ThreeDotsAnimatedLoading>
           return ScaleTransition(
             scale: _animations[index],
             child: Container(
-              width: 8,
-              height: 8,
+              width: 6,
+              height: 6,
               margin: getPaddingAll4,
               decoration: BoxDecoration(
                 color: context.themeColors.onSecondary,

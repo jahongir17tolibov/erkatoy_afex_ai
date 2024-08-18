@@ -6,27 +6,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ReEnterPasswordInput extends StatelessWidget {
   const ReEnterPasswordInput({
     super.key,
-    required this.formKey,
     required this.focusNode,
     required this.controller,
-    required this.firstPasswordText,
   });
 
-  final GlobalKey<FormState> formKey;
   final FocusNode focusNode;
   final TextEditingController controller;
-  final String firstPasswordText;
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<RegisterBloc, RegisterState, bool>(
-      selector: (state) => state.reObscureState,
-      builder: (context, obscureState) {
+    return BlocBuilder<RegisterBloc, RegisterState>(
+      builder: (context, state) {
         return ErkatoyTextField.passwordMode(
-          formKey: formKey,
           hintText: 'Parolni qayta kiriting',
           controller: controller,
-          obscureText: obscureState,
+          obscureText: state.reObscureState,
           focusNode: focusNode,
           inputActionIsNext: false,
           onPressSuffixBtn: () {
@@ -34,7 +28,7 @@ class ReEnterPasswordInput extends StatelessWidget {
           },
           validator: (value) {
             if (value!.length < 8) return 'Parolning uzunligi 8 tadan kam bo`lmasligi kerak!';
-            if (value != firstPasswordText) return 'Qayta kiritilgan parol noto`g`ri';
+            if (value != state.password) return 'Qayta kiritilgan parol noto`g`ri';
             return null;
           },
         );

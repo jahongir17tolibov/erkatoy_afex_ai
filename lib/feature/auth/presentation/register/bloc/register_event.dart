@@ -7,8 +7,22 @@ final class OnObscurePressedRegisterEvent extends RegisterEvent {}
 final class OnReObscurePressedRegisterEvent extends RegisterEvent {}
 
 final class OnRegisterBtnPressedEvent extends RegisterEvent {
-  OnRegisterBtnPressedEvent({required this.phoneNumber, required this.password});
+}
 
-  final String phoneNumber;
-  final String password;
+final class OnInputPhoneRegisterEvent extends RegisterEvent {
+  OnInputPhoneRegisterEvent(this.value);
+
+  final String value;
+}
+
+final class OnInputPasswordRegisterEvent extends RegisterEvent {
+  OnInputPasswordRegisterEvent(this.value);
+
+  final String value;
+}
+
+final class OnInputRePasswordRegisterEvent extends RegisterEvent {
+  OnInputRePasswordRegisterEvent(this.value);
+
+  final String value;
 }

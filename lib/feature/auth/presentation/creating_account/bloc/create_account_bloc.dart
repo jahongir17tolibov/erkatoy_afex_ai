@@ -3,26 +3,49 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
+import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/get_child_info_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/login_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/send_child_info_use_case.dart';
+import 'package:flutter/cupertino.dart';
 
 part 'create_account_event.dart';
-
 part 'create_account_state.dart';
 
 class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
   CreateAccountBloc({
     required this.loginUseCase,
     required this.sendChildInfoUseCase,
+    required this.getChildInfoUseCase,
   }) : super(const CreateAccountState()) {
+    on<OnGetChildInfoCreateAccEvent>(_onGetChildInfoCreateAccEvent);
     on<OnChangeBirthDayDateCreateAccEvent>(_onChangeBirthDayDateEvent);
     on<OnSelectGenderCreateAccEvent>(_onSelectGenderAuthEvent);
-    on<OnWeightEditingCreateAccEvent>(_onWeightEditingAuthEvent);
+    on<OnInputWeightCreateAccEvent>(_onInputWeightCreateAccEvent);
     on<OnStartButtonPressedCreateAccEvent>(_onStartButtonPressedCreateAccEvent);
+    on<OnUpdateChildInfoCreateAccEvent>(_onUpdateChildInfoCreateAccEvent);
   }
 
   final LoginUseCase loginUseCase;
   final SendChildInfoUseCase sendChildInfoUseCase;
+  final GetChildInfoUseCase getChildInfoUseCase;
+
+  FutureOr<void> _onGetChildInfoCreateAccEvent(
+    OnGetChildInfoCreateAccEvent event,
+    Emitter<CreateAccountState> emit,
+  ) async {
+    await getChildInfoUseCase.execute().then((result) {
+      if (result.errorMessage == null) {
+        emit(state.copyWith(
+          weight: result.data!.weight.toString(),
+          birthdayDate: parseNormalToDateTime(result.data!.birthdayDate!),
+          gender: _deFormatGenderText(result.data!.gender!),
+        ));
+      } else {
+        emit(state.copyWith(
+            status: CreateAccountStatus.onShowMessage, message: result.errorMessage));
+      }
+    });
+  }
 
   FutureOr<void> _onChangeBirthDayDateEvent(
     OnChangeBirthDayDateCreateAccEvent event,
@@ -38,8 +61,8 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
     emit(state.copyWith(gender: event.gender));
   }
 
-  FutureOr<void> _onWeightEditingAuthEvent(
-    OnWeightEditingCreateAccEvent event,
+  FutureOr<void> _onInputWeightCreateAccEvent(
+    OnInputWeightCreateAccEvent event,
     Emitter<CreateAccountState> emit,
   ) {
     emit(state.copyWith(weight: event.value));
@@ -78,7 +101,16 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
     });
   }
 
-  Future<void> _sendChildInfo(Emitter<CreateAccountState> emit) async {
+  FutureOr<void> _onUpdateChildInfoCreateAccEvent(
+    OnUpdateChildInfoCreateAccEvent event,
+    Emitter<CreateAccountState> emit,
+  ) async {
+    emit(state.copyWith(onLoading: true));
+    await _sendChildInfo(emit, isUpdate: true);
+    emit(state.copyWith(onLoading: null));
+  }
+
+  Future<void> _sendChildInfo(Emitter<CreateAccountState> emit, {bool isUpdate = false}) async {
     await sendChildInfoUseCase
         .execute(
       birthDayDate: normalDateTimeFormat(state.birthdayDate!),
@@ -94,7 +126,11 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
           onLoading: false,
         ));
         await Future.delayed(const Duration(milliseconds: 1700), () {
-          emit(state.copyWith(status: CreateAccountStatus.onSuccess));
+          emit(state.copyWith(
+            status: isUpdate
+                ? CreateAccountStatus.onSuccessfulUpdated
+                : CreateAccountStatus.onSuccessfulCreated,
+          ));
         });
       } else {
         emit(state.copyWith(
@@ -109,5 +145,9 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
 
   String _formatGenderText() {
     return state.gender! == 'O`g`il' ? 'boy' : 'girl';
+  }
+
+  String _deFormatGenderText(String gender) {
+    return gender == 'boy' ? 'O`g`il' : 'Qiz';
   }
 }

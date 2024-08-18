@@ -1,3 +1,4 @@
+import 'package:erkatoy_afex_ai/core/base/base_extensions.dart';
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/design_system/components/adaptive_loading_view.dart';
 import 'package:erkatoy_afex_ai/design_system/components/no_connection_dialog.dart';
@@ -58,6 +59,10 @@ extension FloatingUi on BuildContext {
           behavior: SnackBarBehavior.floating,
         ),
       );
+  }
+
+  void checkConnectivity(VoidCallback? onConnectionAvailable) {
+    getConnectivity ? onConnectionAvailable?.call() : showSnackBar('Internet bilan aloqa yo`q!');
   }
 
   Future<void> showConnectivityDialog() async {

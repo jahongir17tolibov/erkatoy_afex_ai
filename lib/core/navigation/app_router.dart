@@ -16,9 +16,10 @@ import 'package:erkatoy_afex_ai/feature/home/presentation/health/health_tips_scr
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/nav_bar/scaffold_with_nav_bar.dart';
-import 'package:erkatoy_afex_ai/feature/settings/presentation/settings_screen.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/settings/presentation/settings_screen.dart';
 import 'package:erkatoy_afex_ai/feature/splash/splash_screen.dart';
-import 'package:erkatoy_afex_ai/feature/zen/presentation/zen_mode_screen.dart';
+import 'package:erkatoy_afex_ai/feature/zen/bloc/zen_bloc.dart';
+import 'package:erkatoy_afex_ai/feature/zen/zen_mode_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,7 +88,10 @@ class AppRouter {
         path: ZenModeScreen.routePath,
         name: ZenModeScreen.routeName,
         parentNavigatorKey: _rootNavigatorKey,
-        pageBuilder: (context, _) => _materialPage(const ZenModeScreen()),
+        pageBuilder: (context, _) => _materialPage(BlocProvider(
+          create: (context) => getIt<ZenBloc>(),
+          child: const ZenModeScreen(),
+        )),
       ),
 
       /// home

@@ -1,16 +1,17 @@
+import 'package:erkatoy_afex_ai/core/service/permission_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app/application.dart';
 import 'core/provider/local/hive_database.dart';
+import 'design_system/components/custom_native_splash.dart';
 import 'di.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  // final WidgetsBinding widgetsBinding =
-  WidgetsFlutterBinding.ensureInitialized();
-  // CustomNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  CustomNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -18,6 +19,8 @@ void main() async {
 
   await configureDependencies();
   await HiveDatabase.init();
+
+  await PermissionService.audio(() {});
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

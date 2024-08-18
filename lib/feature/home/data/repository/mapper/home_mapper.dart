@@ -1,5 +1,7 @@
 import 'package:erkatoy_afex_ai/feature/home/data/local/entity/chat_entity.dart';
+import 'package:erkatoy_afex_ai/feature/home/data/remote/dto/current_activity_dto.dart';
 import 'package:erkatoy_afex_ai/feature/home/data/remote/dto/health_dto.dart';
+import 'package:erkatoy_afex_ai/feature/home/domain/entity/activity_schedule.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/entity/chat.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/entity/health.dart';
 
@@ -18,4 +20,8 @@ extension ChatMapper on Chat {
         requestTime: requestTime,
         isUser: isUser,
       );
+}
+
+extension ActivityDtoMapper on CurrentActivityDto {
+  ActivitySchedule toActivitySchedule() => ActivitySchedule(time: time!, activity: activity!);
 }

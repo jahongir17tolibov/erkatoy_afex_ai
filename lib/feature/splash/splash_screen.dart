@@ -3,6 +3,7 @@ import 'package:erkatoy_afex_ai/core/constants/hive_constants.dart';
 import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/core/provider/local/hive_local_storage.dart';
 import 'package:erkatoy_afex_ai/core/service/connectivity/connectivity_cubit.dart';
+import 'package:erkatoy_afex_ai/design_system/components/custom_native_splash.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/di.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/register/register_screen.dart';
@@ -22,12 +23,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 2), () {
-      getAuthToken().then((value) {
-        value == null ? RegisterScreen.open(context) : HomeScreen.open(context);
-      });
-      context.read<ConnectivityCubit>().observeConnectivity();
-    });
+    Future.microtask(() => _initSplash());
     super.initState();
   }
 
@@ -63,6 +59,16 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       // ),
     );
+  }
+
+  void _initSplash() async {
+    CustomNativeSplash.remove();
+    await Future.delayed(const Duration(seconds: 2), () {
+      getAuthToken().then((value) {
+        value == null ? RegisterScreen.open(context) : HomeScreen.open(context);
+      });
+      context.read<ConnectivityCubit>().observeConnectivity();
+    });
   }
 
   Future<String?> getAuthToken() async {

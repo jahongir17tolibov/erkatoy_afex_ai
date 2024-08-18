@@ -2,8 +2,7 @@ import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/image_asset_icon.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
-import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/creating_account_screen.dart';
-import 'package:erkatoy_afex_ai/feature/zen/presentation/zen_mode_screen.dart';
+import 'package:erkatoy_afex_ai/feature/zen/zen_mode_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

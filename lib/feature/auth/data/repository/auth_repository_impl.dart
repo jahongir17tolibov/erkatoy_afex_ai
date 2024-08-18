@@ -1,6 +1,8 @@
+import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/hive_constants.dart';
 import 'package:erkatoy_afex_ai/core/provider/local/hive_local_storage.dart';
 import 'package:erkatoy_afex_ai/feature/auth/data/remote/source/auth_remote_source_impl.dart';
+import 'package:erkatoy_afex_ai/feature/auth/data/repository/mapper/auth_mapper.dart';
 import 'package:erkatoy_afex_ai/feature/auth/domain/repository/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
@@ -16,7 +18,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<LoginResult> login({required String phone, required String password}) async {
     return await _remoteSource.loginUser(phone: phone, password: password).then((result) async {
       if (result.detail == null) {
-        await saveAuthTokenToLocalStorage(result.accessToken!);
+        await _saveAuthTokenToLocalStorage(result.accessToken!);
         return LoginResult(data: result.accessToken!);
       }
       return LoginResult(errorMessage: result.detail!);
@@ -39,22 +41,21 @@ class AuthRepositoryImpl implements AuthRepository {
     required String gender,
     required double weight,
   }) async {
-    final authToken = await getAuthToken();
     return await _remoteSource
         .sendChildInfo(
       birthDayDate: birthDayDate,
       gender: gender,
       weight: weight,
-      bearerToken: authToken!,
-    ).then((childInfo) {
+    )
+        .then((childInfo) {
       if (childInfo.userId != null) {
         return ChildInfoResult(data: '${childInfo.message} ${childInfo.userId}');
       }
-      return ChildInfoResult(errorMessage: childInfo.message);
+      return ChildInfoResult(errorMessage: childInfo.message ?? childInfo.detail);
     });
   }
 
-  Future<void> saveAuthTokenToLocalStorage(String token) async {
+  Future<void> _saveAuthTokenToLocalStorage(String token) async {
     await _localStorage.saveString(
       boxName: HiveConstants.authTokenBoxName,
       key: HiveConstants.authTokenKey,
@@ -62,10 +63,13 @@ class AuthRepositoryImpl implements AuthRepository {
     );
   }
 
-  Future<String?> getAuthToken() async {
-    return await _localStorage.getString(
-      boxName: HiveConstants.authTokenBoxName,
-      key: HiveConstants.authTokenKey,
-    );
+  @override
+  Future<GetChildInfoResult> getChildInfo() async {
+    return await _remoteSource.getChildInfo().then((dto) {
+      if (dto.detail == null) {
+        return GetChildInfoResult(data: dto.toChildInfo());
+      }
+      return GetChildInfoResult(errorMessage: dto.message ?? dto.detail);
+    });
   }
 }

@@ -20,7 +20,7 @@ class DailyScheduleCard extends StatelessWidget {
       builder: (context, currentActivity) {
         return ScaleOnPress(
           onTap: () {
-            DailyScheduleScreen.open(context, currentTime: currentActivity.substring(0, 5));
+            onNavigateDailySchedule(context, currentActivity);
           },
           child: HomeCardsContainer(
             child: Column(
@@ -62,5 +62,18 @@ class DailyScheduleCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  void onNavigateDailySchedule(BuildContext context, String currentActivity) {
+    String? argument;
+    final List<String> parts = currentActivity.substring(0, 5).split(':');
+    printOnDebug(parts);
+    if (parts.length > 1) {
+      final int hours = int.parse(parts[0]);
+      final int minutes = int.parse(parts[1]);
+      argument = minutes > 30 ? '$hours:30' : '$hours:00';
+    }
+    printOnDebug(argument);
+    DailyScheduleScreen.open(context, currentTime: argument ?? '');
   }
 }

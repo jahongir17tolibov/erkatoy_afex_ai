@@ -27,8 +27,10 @@ import 'package:get_it/get_it.dart';
 
 import 'core/provider/local/hive_local_storage.dart';
 import 'core/service/connectivity/connectivity_cubit.dart';
+import 'feature/auth/domain/use_case/get_child_info_use_case.dart';
 import 'feature/home/domain/use_case/get_cry_reason_with_audio_use_case.dart';
-import 'feature/settings/presentation/bloc/settings_bloc.dart';
+import 'feature/home/presentation/settings/presentation/bloc/settings_bloc.dart';
+import 'feature/zen/bloc/zen_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -53,13 +55,16 @@ Future<void> configureDependencies() async {
         () => SendChildInfoUseCase(repository: getIt<AuthRepository>()))
     ..registerFactory<RegisterUseCase>(() => RegisterUseCase(repository: getIt<AuthRepository>()))
     ..registerFactory<LoginUseCase>(() => LoginUseCase(repository: getIt<AuthRepository>()))
-    ..registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: getIt<RegisterUseCase>()))
+    ..registerFactory<GetChildInfoUseCase>(
+        () => GetChildInfoUseCase(repository: getIt<AuthRepository>()))
     // bloc
+    ..registerFactory<RegisterBloc>(() => RegisterBloc(registerUseCase: getIt<RegisterUseCase>()))
+    ..registerFactory<LoginBloc>(() => LoginBloc(loginUseCase: getIt<LoginUseCase>()))
     ..registerFactory<CreateAccountBloc>(() => CreateAccountBloc(
           loginUseCase: getIt<LoginUseCase>(),
           sendChildInfoUseCase: getIt<SendChildInfoUseCase>(),
+          getChildInfoUseCase: getIt<GetChildInfoUseCase>(),
         ))
-    ..registerFactory<LoginBloc>(() => LoginBloc(loginUseCase: getIt<LoginUseCase>()))
 
     /// home
     ..registerLazySingleton<HomeLocalSource>(HomeLocalSource.new)
@@ -98,6 +103,7 @@ Future<void> configureDependencies() async {
         () => DailyScheduleBloc(getAllActivitiesUseCase: getIt<GetAllActivitiesUseCase>()))
     ..registerFactory<HealthBloc>(
         () => HealthBloc(getHealthTipsUseCase: getIt<GetHealthTipsUseCase>()))
+    ..registerFactory<ZenBloc>((ZenBloc.new))
 
     /// settings
     ..registerFactory<SettingsBloc>(() => SettingsBloc(localStorage: getIt<HiveLocalStorage>()));

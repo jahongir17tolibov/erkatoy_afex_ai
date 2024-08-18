@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 
 typedef HealthTipsResult = Result<List<Health>>;
 typedef AllActivitiesResult = Result<List<ActivitySchedule>>;
-typedef CurrentActivityResult = Result<String>;
+typedef CurrentActivityResult = Result<ActivitySchedule>;
 typedef CryReasonResult = Result<String>;
 
 abstract interface class HomeRepository {

@@ -4,9 +4,16 @@ sealed class LoginEvent {}
 
 final class OnObscurePressedLoginEvent extends LoginEvent {}
 
-final class OnLoginBtnPressedEvent extends LoginEvent {
-  OnLoginBtnPressedEvent({required this.phoneNumber, required this.password});
+final class OnLoginBtnPressedEvent extends LoginEvent {}
 
-  final String phoneNumber;
-  final String password;
+final class OnInputPhoneLoginEvent extends LoginEvent {
+  OnInputPhoneLoginEvent(this.value);
+
+  final String value;
+}
+
+final class OnInputPasswordLoginEvent extends LoginEvent {
+  OnInputPasswordLoginEvent(this.value);
+
+  final String value;
 }

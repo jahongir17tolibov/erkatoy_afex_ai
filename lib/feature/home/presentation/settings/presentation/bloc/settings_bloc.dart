@@ -16,6 +16,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<OnSwitchAppThemeSettingsEvent>(_onSwitchAppThemeSettingsEvent);
     on<OnSwitchNotificationSettingsEvent>(_onSwitchNotificationSettingsEvent);
     on<OnContactToDeveloperSettingsEvent>(_onContactToDeveloperSettingsEvent);
+    on<OnLogOutUserSettingEvent>(_onLogOutUserSettingEvent);
   }
 
   final HiveLocalStorage localStorage;
@@ -24,19 +25,15 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     OnGetSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    await _getAppThemeState().then((value) async {
-      if (value == null) {
-        await _saveAppTheme(false);
-      } else {
-        emit(state.copyWith(darkModeEnabled: value));
-      }
-    });
+    final appTheme = await _getAppThemeState();
+
+    emit(state.copyWith(darkModeEnabled: appTheme ?? false));
 
     await _getNotificationState().then((value) async {
       if (value == null) {
         await _saveNotificationEnabled(false);
       } else {
-        emit(state.copyWith(darkModeEnabled: value));
+        emit(state.copyWith(notificationEnabled: value));
       }
     });
   }
@@ -66,6 +63,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     await _openTelegram('jamshidds');
   }
 
+  FutureOr<void> _onLogOutUserSettingEvent(
+    OnLogOutUserSettingEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _deleteAuthKey().whenComplete(() async {
+      final authKey = await _getAuthKey();
+      if (authKey == null) {
+        emit(state.copyWith(status: SettingsStatus.onUserLogOut));
+      }
+    });
+  }
+
   /// repo
   Future<bool?> _getAppThemeState() => localStorage.getBool(
         boxName: HiveConstants.settingsBoxName,
@@ -76,6 +85,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         boxName: HiveConstants.settingsBoxName,
         key: HiveConstants.appThemeKey,
         value: value,
+      );
+
+  Future<String?> _getAuthKey() => localStorage.getString(
+        boxName: HiveConstants.authTokenBoxName,
+        key: HiveConstants.authTokenKey,
+      );
+
+  Future<void> _deleteAuthKey() => localStorage.deleteString(
+        boxName: HiveConstants.authTokenBoxName,
+        key: HiveConstants.authTokenKey,
       );
 
   Future<bool?> _getNotificationState() => localStorage.getBool(

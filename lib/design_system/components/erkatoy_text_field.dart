@@ -7,7 +7,6 @@ import 'google_font_style.dart';
 class ErkatoyTextField extends StatelessWidget {
   const ErkatoyTextField({
     super.key,
-    required this.formKey,
     required this.hintText,
     required this.controller,
     this.focusNode,
@@ -18,6 +17,7 @@ class ErkatoyTextField extends StatelessWidget {
     this.inputActionIsNext = true,
     this.onEditingComplete,
     this.maxLength,
+    this.hideErrorText = false,
   })  : isReadOnly = false,
         obscureText = false,
         onPressSuffixBtn = null,
@@ -25,7 +25,6 @@ class ErkatoyTextField extends StatelessWidget {
 
   const ErkatoyTextField.readOnlyMode({
     super.key,
-    required this.formKey,
     required this.hintText,
     this.focusNode,
     this.validator,
@@ -39,11 +38,11 @@ class ErkatoyTextField extends StatelessWidget {
         textInputType = TextInputType.none,
         isExpand = false,
         removeBorders = true,
-        onPressSuffixBtn = null;
+        onPressSuffixBtn = null,
+        hideErrorText = true;
 
   const ErkatoyTextField.passwordMode({
     super.key,
-    required this.formKey,
     required this.hintText,
     this.focusNode,
     this.validator,
@@ -57,9 +56,9 @@ class ErkatoyTextField extends StatelessWidget {
   })  : isReadOnly = false,
         textInputType = TextInputType.visiblePassword,
         isExpand = false,
-        removeBorders = false;
+        removeBorders = false,
+        hideErrorText = false;
 
-  final GlobalKey<FormState> formKey;
   final String hintText;
   final TextEditingController controller;
   final FocusNode? focusNode;
@@ -74,80 +73,82 @@ class ErkatoyTextField extends StatelessWidget {
   final VoidCallback? onEditingComplete;
   final bool removeBorders;
   final bool inputActionIsNext;
+  final bool hideErrorText;
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: TextFormField(
-        controller: controller,
-        focusNode: focusNode,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        cursorColor: Theme.of(context).colorScheme.primary,
-        textInputAction: inputActionIsNext ? TextInputAction.next : TextInputAction.done,
-        maxLength: maxLength,
-        keyboardType: textInputType,
-        cursorOpacityAnimates: true,
-        obscureText: obscureText,
-        expands: isExpand,
-        readOnly: isReadOnly,
-        onEditingComplete: onEditingComplete,
-        cursorErrorColor: Theme.of(context).colorScheme.error,
-        onTap: onTap,
-        textCapitalization: (textInputType == TextInputType.name)
-            ? TextCapitalization.sentences
-            : TextCapitalization.none,
-        validator: (value) {
-          if (value == null || value.isEmpty) return 'maydon bo`sh bo`lmasligi kerak!';
-          return validator?.call(value);
-        },
-        style: googleFontStyle(
-          fontSize: 16.textSize(context),
-          fontColor: Theme.of(context).colorScheme.onSurface,
+    return TextFormField(
+      controller: controller,
+      focusNode: focusNode,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      cursorColor: Theme.of(context).colorScheme.primary,
+      textInputAction: inputActionIsNext ? TextInputAction.next : TextInputAction.done,
+      maxLength: maxLength,
+      keyboardType: textInputType,
+      cursorOpacityAnimates: true,
+      obscureText: obscureText,
+      expands: isExpand,
+      readOnly: isReadOnly,
+      onEditingComplete: onEditingComplete,
+      cursorErrorColor: Theme.of(context).colorScheme.error,
+      onTap: onTap,
+      textCapitalization: (textInputType == TextInputType.name)
+          ? TextCapitalization.sentences
+          : TextCapitalization.none,
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Maydon bo`sh bo`lmasligi kerak!';
+        return validator?.call(value);
+      },
+      style: googleFontStyle(
+        fontSize: 16.textSize(context),
+        fontColor: Theme.of(context).colorScheme.onSurface,
+      ),
+      decoration: InputDecoration(
+        enabled: true,
+        filled: true,
+        isDense: true,
+        counterText: '',
+        fillColor: context.themeColors.surface,
+        hintText: hintText,
+        errorStyle: googleFontStyle(
+          fontSize: (hideErrorText ? 0 : 11).textSize(context),
+          fontColor: context.themeColors.error,
         ),
-        decoration: InputDecoration(
-          enabled: true,
-          filled: true,
-          isDense: true,
-          counterText: '',
-          fillColor: context.themeColors.surface,
-          hintText: hintText,
-          hintStyle: googleFontStyle(fontSize: 16.textSize(context)),
-          enabledBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey),
-            borderRadius: getBorderAll10,
+        hintStyle: googleFontStyle(fontSize: 16.textSize(context)),
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.grey),
+          borderRadius: getBorderAll10,
+        ),
+        suffixIcon: textInputType == TextInputType.visiblePassword
+            ? IconButton(
+                onPressed: onPressSuffixBtn,
+                icon: Icon(
+                  !obscureText ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey,
+                ),
+              )
+            : null,
+        errorBorder: OutlineInputBorder(
+          borderRadius: getBorderAll8,
+          borderSide: adaptiveBorderSide(
+            context,
+            color: context.themeColors.error,
           ),
-          suffixIcon: textInputType == TextInputType.visiblePassword
-              ? IconButton(
-                  onPressed: onPressSuffixBtn,
-                  icon: Icon(
-                    !obscureText ? Icons.visibility : Icons.visibility_off,
-                    color: Colors.grey,
-                  ),
-                )
-              : null,
-          errorBorder: OutlineInputBorder(
-            borderRadius: getBorderAll8,
-            borderSide: adaptiveBorderSide(
-              context,
-              color: context.themeColors.error,
-            ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: getBorderAll8,
+          borderSide: adaptiveBorderSide(
+            context,
+            color: context.themeColors.primary,
+            width: 0.75,
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: getBorderAll8,
-            borderSide: adaptiveBorderSide(
-              context,
-              color: context.themeColors.primary,
-              width: 2,
-            ),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: getBorderAll8,
-            borderSide: adaptiveBorderSide(
-              context,
-              color: context.themeColors.error,
-              width: 2,
-            ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: getBorderAll8,
+          borderSide: adaptiveBorderSide(
+            context,
+            color: context.themeColors.error,
+            width: 0.75,
           ),
         ),
       ),

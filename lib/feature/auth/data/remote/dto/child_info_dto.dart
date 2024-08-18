@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 
 class ChildInfoDto extends Equatable {
   const ChildInfoDto({
@@ -7,6 +8,7 @@ class ChildInfoDto extends Equatable {
     this.gender,
     this.weight,
     this.birthdayDate,
+    this.detail,
   });
 
   final String? message;
@@ -14,6 +16,7 @@ class ChildInfoDto extends Equatable {
   final String? gender;
   final num? weight;
   final String? birthdayDate;
+  final String? detail;
 
   factory ChildInfoDto.fromJson(Map<String, dynamic> json) {
     return ChildInfoDto(
@@ -22,9 +25,10 @@ class ChildInfoDto extends Equatable {
       gender: json['gender'] as String?,
       weight: json['weight'] as num?,
       birthdayDate: json['birthday'] as String?,
+      detail: json['detail'] as String?,
     );
   }
 
   @override
-  List<Object?> get props => [message, userId, gender, weight, birthdayDate];
+  List<Object?> get props => [message, userId, gender, weight, birthdayDate, detail];
 }

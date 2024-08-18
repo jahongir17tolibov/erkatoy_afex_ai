@@ -6,8 +6,8 @@ import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/bloc/da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class DailyScheduleTable extends StatelessWidget {
-  const DailyScheduleTable({super.key});
+class DailyScheduleListView extends StatelessWidget {
+  const DailyScheduleListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +22,15 @@ class DailyScheduleTable extends StatelessWidget {
             color: context.themeColors.secondary,
             borderRadius: getBorderAll16,
           ),
-          child: SizedBox(
+          child: SingleChildScrollView(
             child: Table(
               border: TableBorder.symmetric(
                 inside: BorderSide(color: context.themeColors.onSecondary),
               ),
-              defaultColumnWidth: FixedColumnWidth(0.2.screenWidth(context)),
+              columnWidths: const <int, TableColumnWidth>{
+                0: FractionColumnWidth(0.25),
+                1: IntrinsicColumnWidth(),
+              },
               children: [
                 ...List.generate(
                   schedule.length,
@@ -38,24 +41,24 @@ class DailyScheduleTable extends StatelessWidget {
                         color: item.isCurrent ? context.themeColors.primary : null,
                       ),
                       children: <Widget>[
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
+                        Center(
                           child: Padding(
                             padding: getPaddingAll6,
                             child: TextView(
                               text: item.time,
-                              textSize: 24.textSize(context),
+                              textSize: 20.textSize(context),
                               textColor: item.isCurrent
                                   ? context.themeColors.onPrimary
                                   : context.themeColors.onSecondary,
                               fontWeight: item.isCurrent ? FontWeight.w500 : null,
+                              fixedTextSize: true,
                             ),
                           ),
                         ),
                         TableCell(
                           verticalAlignment: TableCellVerticalAlignment.middle,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 6),
+                            padding: getPaddingAll6,
                             child: TextView(
                               text: item.activity,
                               textSize: 18.textSize(context),
@@ -63,8 +66,7 @@ class DailyScheduleTable extends StatelessWidget {
                                   ? context.themeColors.onPrimary
                                   : context.themeColors.onSecondary,
                               fontWeight: item.isCurrent ? FontWeight.w500 : null,
-                              maxLines: 1,
-                              textOverflow: TextOverflow.ellipsis,
+                              fixedTextSize: true,
                             ),
                           ),
                         ),

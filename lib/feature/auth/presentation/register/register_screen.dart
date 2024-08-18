@@ -23,7 +23,7 @@ class RegisterScreen extends StatefulWidget {
   static const String routeName = '/register_login';
 
   static void open(BuildContext context) {
-    context.push(routeName);
+    context.replace(routeName);
   }
 
   @override
@@ -31,20 +31,24 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final GlobalKey<FormState> _validateForm = GlobalKey<FormState>();
   // phone input
   final FocusNode _phoneFocusNode = FocusNode();
-  final GlobalKey<FormState> _phoneForm = GlobalKey<FormState>();
   final TextEditingController _phoneEditingController = TextEditingController();
 
   // password input
   final FocusNode _rePasswordFocusNode = FocusNode();
-  final GlobalKey<FormState> _rePasswordForm = GlobalKey<FormState>();
   final TextEditingController _rePasswordEditingController = TextEditingController();
 
   // password input
   final FocusNode _passwordFocusNode = FocusNode();
-  final GlobalKey<FormState> _passwordForm = GlobalKey<FormState>();
   final TextEditingController _passwordEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    _initControllers();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,48 +81,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
           padding: EdgeInsets.symmetric(horizontal: 0.1.screenWidth(context)),
           screenWithAppBar: true,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                PhoneInput(
-                  formKey: _phoneForm,
-                  focusNode: _phoneFocusNode,
-                  controller: _phoneEditingController,
-                ),
-                getHeightSize10,
-                RegisterPasswordInput(
-                  formKey: _passwordForm,
-                  focusNode: _passwordFocusNode,
-                  controller: _passwordEditingController,
-                  onKeyboardNextBtnPressed: () {
-                    _rePasswordFocusNode.requestFocus();
-                  },
-                ),
-                getHeightSize10,
-                ReEnterPasswordInput(
-                  formKey: _rePasswordForm,
-                  focusNode: _rePasswordFocusNode,
-                  controller: _rePasswordEditingController,
-                  firstPasswordText: _passwordEditingController.text,
-                ),
-                getHeightSize20,
-                RegisterButton(onPressed: () {
-                  // HomeScreen.open(context);
-                  // CreatingAccountScreen.open(
-                  //   context,
-                  //   phone: _phoneEditingController.text,
-                  //   pass: _passwordEditingController.text,
-                  // );
-                  if (validationState) {
-                    context.read<RegisterBloc>().add(OnRegisterBtnPressedEvent(
-                          phoneNumber: _phoneEditingController.text,
-                          password: _passwordEditingController.text,
-                        ));
-                  }
-                }),
-                getHeightSize8,
-                const AlreadySignedTextButton(),
-              ],
+            child: Form(
+              key: _validateForm,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  PhoneInput(
+                    focusNode: _phoneFocusNode,
+                    controller: _phoneEditingController,
+                  ),
+                  getHeightSize10,
+                  RegisterPasswordInput(
+                    focusNode: _passwordFocusNode,
+                    controller: _passwordEditingController,
+                    onKeyboardNextBtnPressed: () {
+                      _rePasswordFocusNode.requestFocus();
+                    },
+                  ),
+                  getHeightSize10,
+                  ReEnterPasswordInput(
+                    focusNode: _rePasswordFocusNode,
+                    controller: _rePasswordEditingController,
+                  ),
+                  getHeightSize20,
+                  RegisterButton(validationState: validationState),
+                  getHeightSize8,
+                  const AlreadySignedTextButton(),
+                ],
+              ),
             ),
           ),
         ),
@@ -126,19 +116,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  bool get validationState {
-    final phoneFormState = _phoneForm.currentState;
-    final passwordFormState = _passwordForm.currentState;
-    final rePasswordFormState = _rePasswordForm.currentState;
-    if (phoneFormState != null && passwordFormState != null && rePasswordFormState != null) {
-      if (context.getConnectivity &&
-          phoneFormState.validate() &&
-          passwordFormState.validate() &&
-          rePasswordFormState.validate()) {
-        return true;
-      }
-    }
-    return false;
+  bool get validationState => _validateForm.currentState?.validate() ?? false;
+
+  void _initControllers() {
+    _phoneEditingController.addListener(() {
+      String value = _phoneEditingController.text;
+      context.read<RegisterBloc>().add(OnInputPhoneRegisterEvent(value));
+    });
+    _passwordEditingController.addListener(() {
+      String value = _passwordEditingController.text;
+      context.read<RegisterBloc>().add(OnInputPasswordRegisterEvent(value));
+    });
+    _rePasswordEditingController.addListener(() {
+      String value = _rePasswordEditingController.text;
+      context.read<RegisterBloc>().add(OnInputRePasswordRegisterEvent(value));
+    });
   }
 
   @override

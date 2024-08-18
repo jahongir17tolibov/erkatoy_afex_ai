@@ -1,7 +1,6 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
-import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/chat_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,15 +19,25 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           onTap: () {
             ChatScreen.open(context);
           },
-          borderRadius: BorderRadius.circular(48),
+          borderRadius: BorderRadius.circular(500),
           child: Padding(
             padding: getPaddingAll8,
-            child: SvgPicture.asset(
-              ImagesConstants.chatIconSvg,
-              width: 24,
-              height: 24,
-              colorFilter: ColorFilter.mode(context.themeColors.onSurface, BlendMode.srcATop),
-              fit: BoxFit.cover,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextView(
+                  text: 'Chatbot',
+                  textColor: context.themeColors.onSurface,
+                ),
+                getWidthSize6,
+                SvgPicture.asset(
+                  ImagesConstants.chatIconSvg,
+                  width: 20,
+                  height: 20,
+                  colorFilter: ColorFilter.mode(context.themeColors.onSurface, BlendMode.srcATop),
+                  fit: BoxFit.cover,
+                ),
+              ],
             ),
           ),
         ),

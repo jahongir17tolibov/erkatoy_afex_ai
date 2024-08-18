@@ -26,8 +26,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetCurrentActivityUseCase getCurrentActivityUseCase;
   final GetCryReasonWithAudioUseCase getCryReasonWithAudioUseCase;
 
-  final FlutterSoundRecorder recorder = FlutterSoundRecorder();
-  final FlutterSoundPlayer player = FlutterSoundPlayer();
+  final FlutterSoundRecorder _recorder = FlutterSoundRecorder();
+  final FlutterSoundPlayer _player = FlutterSoundPlayer();
 
   FutureOr<void> _onGetCurrentActivityHomeEvent(
     OnGetCurrentActivityHomeEvent event,
@@ -35,8 +35,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     await _initializeRecordAudio(emit);
     await getCurrentActivityUseCase.execute().then((result) {
+      final String activity = '${result.data?.time} - ${result.data?.activity}';
       emit(state.copyWith(
-        currentActivity: result.errorMessage == null ? result.data! : result.errorMessage!,
+        currentActivity: result.errorMessage == null ? activity : result.errorMessage ?? '',
       ));
     });
   }
@@ -49,12 +50,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (audioRecord) {
       if (state.isRecording) {
         emit(state.copyWith(isRecording: false));
-        await recorder.stopRecorder().whenComplete(() async {
+        await _recorder.stopRecorder().whenComplete(() async {
           await _uploadRecordedAudioAndGetCryReason(emit);
         });
       } else {
-        emit(state.copyWith(isRecording: true));
-        await recorder.startRecorder(toFile: state.recordPath);
+        emit(state.copyWith(isRecording: true, cryReason: 'Eshitilmoqda...'));
+        await _recorder.startRecorder(toFile: state.recordPath);
       }
     }
   }
@@ -66,8 +67,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> _initializeRecordAudio(Emitter<HomeState> emit) async {
     final Directory tempDir = await getTemporaryDirectory();
-    await recorder.openRecorder();
-    await player.openPlayer();
+    await _recorder.openRecorder();
     emit(state.copyWith(recordPath: '${tempDir.path}/cry_record.aac'));
   }
 
@@ -83,5 +83,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       });
     }
+  }
+
+  @override
+  Future<void> close() {
+    _recorder.closeRecorder();
+    return super.close();
   }
 }

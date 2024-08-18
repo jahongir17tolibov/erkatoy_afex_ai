@@ -1,6 +1,7 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/scale_on_press_button.dart';
+import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,9 @@ class RecordCryButton extends StatelessWidget {
         return ScaleOnPress(
           child: GestureDetector(
             onTap: () {
-              context.read<HomeBloc>().add(OnPressRecordVoiceHomeEvent());
+              context.checkConnectivity(() {
+                context.read<HomeBloc>().add(OnPressRecordVoiceHomeEvent());
+              });
             },
             child: Container(
               width: 64,

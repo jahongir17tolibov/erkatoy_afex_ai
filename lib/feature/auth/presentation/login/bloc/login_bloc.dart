@@ -11,6 +11,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({
     required this.loginUseCase,
   }) : super(const LoginState()) {
+    on<OnInputPhoneLoginEvent>(_onInputPhoneLoginEvent);
+    on<OnInputPasswordLoginEvent>(_onInputPasswordLoginEvent);
     on<OnObscurePressedLoginEvent>(_onObscurePressedLoginEvent);
     on<OnLoginBtnPressedEvent>(_onLoginBtnPressedEvent);
   }
@@ -30,12 +32,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   ) async {
     emit(state.copyWith(onLoading: true));
     await loginUseCase
-        .execute(phone: event.phoneNumber, password: event.password)
+        .execute(phone: state.phoneNumber, password: state.password)
         .then((result) async {
       if (result.errorMessage == null) {
         emit(state.copyWith(
           status: LoginStatus.onShowMessage,
-          message: '${event.phoneNumber} raqam bilan kirdingiz!',
+          message: '${state.phoneNumber} raqam bilan kirdingiz!',
           onLoading: false,
         ));
         await Future.delayed(const Duration(milliseconds: 1700), () {
@@ -50,5 +52,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     });
     emit(state.copyWith(onLoading: null));
+  }
+
+  FutureOr<void> _onInputPhoneLoginEvent(
+    OnInputPhoneLoginEvent event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(state.copyWith(phoneNumber: event.value));
+  }
+
+  FutureOr<void> _onInputPasswordLoginEvent(
+    OnInputPasswordLoginEvent event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(state.copyWith(password: event.value));
   }
 }

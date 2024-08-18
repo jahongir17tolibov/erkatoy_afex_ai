@@ -10,6 +10,9 @@ part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   RegisterBloc({required this.registerUseCase}) : super(const RegisterState()) {
+    on<OnInputPhoneRegisterEvent>(_onInputPhoneRegisterEvent);
+    on<OnInputPasswordRegisterEvent>(_onInputPasswordRegisterEvent);
+    on<OnInputRePasswordRegisterEvent>(_onInputRePasswordRegisterEvent);
     on<OnRegisterBtnPressedEvent>(_onRegisterBtnPressedAuthEvent);
     on<OnObscurePressedRegisterEvent>(_onObscurePressedAuthEvent);
     on<OnReObscurePressedRegisterEvent>(_onReObscurePressedAuthEvent);
@@ -37,7 +40,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   ) async {
     emit(state.copyWith(onLoading: true));
     await registerUseCase
-        .execute(phone: event.phoneNumber, password: event.password)
+        .execute(phone: state.phoneNumber, password: state.password)
         .then((result) async {
       if (result.errorMessage == null) {
         printOnDebug(result.data);
@@ -58,5 +61,26 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       }
     });
     emit(state.copyWith(onLoading: null));
+  }
+
+  FutureOr<void> _onInputPhoneRegisterEvent(
+    OnInputPhoneRegisterEvent event,
+    Emitter<RegisterState> emit,
+  ) {
+    emit(state.copyWith(phoneNumber: event.value));
+  }
+
+  FutureOr<void> _onInputPasswordRegisterEvent(
+    OnInputPasswordRegisterEvent event,
+    Emitter<RegisterState> emit,
+  ) {
+    emit(state.copyWith(password: event.value));
+  }
+
+  FutureOr<void> _onInputRePasswordRegisterEvent(
+    OnInputRePasswordRegisterEvent event,
+    Emitter<RegisterState> emit,
+  ) {
+    emit(state.copyWith(rePassword: event.value));
   }
 }

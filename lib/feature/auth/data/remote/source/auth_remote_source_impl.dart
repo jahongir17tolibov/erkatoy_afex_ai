@@ -56,23 +56,34 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
     required String birthDayDate,
     required String gender,
     required double weight,
-    required String bearerToken,
   }) async {
+    final option = await _apiClient.postOptionsWithBearer;
     ChildInfoDto childInfo;
     try {
       childInfo = await _apiClient.getDio.post(
         'child_info',
-        options: Options(headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $bearerToken',
-        }),
+        options: option,
         data: {
           'birthday': birthDayDate,
           'gender': gender,
           'weight': weight,
         },
       ).then((response) => ChildInfoDto.fromJson(response.data));
+    } on DioException catch (e) {
+      final exception = DioExceptionHandler.fromDioError(e);
+      childInfo = ChildInfoDto(message: exception.errorMessage);
+    }
+    return childInfo;
+  }
+
+  @override
+  Future<ChildInfoDto> getChildInfo() async {
+    final option = await _apiClient.getOptions;
+    ChildInfoDto childInfo;
+    try {
+      childInfo = await _apiClient.getDio
+          .get('get_child_info', options: option)
+          .then((response) => ChildInfoDto.fromJson(response.data));
     } on DioException catch (e) {
       final exception = DioExceptionHandler.fromDioError(e);
       childInfo = ChildInfoDto(message: exception.errorMessage);

@@ -33,8 +33,8 @@ class CryReasonContainer extends StatelessWidget {
     if (!state.isLoading) {
       return state.cryReason.isEmpty
           ? 'Sababni bilish uchun ovozni yozib oling...'
-          : 'Sabab: ${state.cryReason}';
+          : state.cryReason;
     }
-    return 'Eshitilmoqda...';
+    return 'Tahlil qilinmoqda...';
   }
 }

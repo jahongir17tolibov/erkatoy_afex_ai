@@ -18,6 +18,7 @@ class SingleChildScrollWithSize extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       padding: padding,
       child: ConstrainedBox(
         constraints: BoxConstraints(

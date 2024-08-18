@@ -1,5 +1,6 @@
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 void printOnDebug(Object? msg) {
   debugPrint("------------------\n$msg\n------------------");
@@ -43,15 +44,20 @@ BorderRadius get getBorderAll20 => BorderRadius.circular(20);
 BorderRadius getFullBorder(BuildContext context) => BorderRadius.circular(1.screenWidth(context));
 BorderRadius getCustomBorder(double radius) => BorderRadius.circular(radius);
 
-
 /// dividers
 Widget get getDivider => const Divider(color: Colors.grey);
 Widget get getOpacityDivider => Divider(color: Colors.grey.withOpacity(0.5));
-Widget getOnSurfaceDivider(BuildContext context) =>  Divider(color: context.themeColors.onSurface);
+Widget getOnSurfaceDivider(BuildContext context) => Divider(color: context.themeColors.onSurface);
 
 String normalDateTimeFormat(DateTime dateTime) {
   String day = dateTime.day.toString().length == 1 ? '0${dateTime.day}' : dateTime.day.toString();
   String month =
-  dateTime.month.toString().length == 1 ? '0${dateTime.month}' : dateTime.month.toString();
+      dateTime.month.toString().length == 1 ? '0${dateTime.month}' : dateTime.month.toString();
+
   return '$day.$month.${dateTime.year}';
+}
+
+DateTime parseNormalToDateTime(String normalDate) {
+  final dateFormat = DateFormat('dd.MM.yyyyy');
+  return dateFormat.parse(normalDate);
 }

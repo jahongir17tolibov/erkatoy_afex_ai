@@ -1,7 +1,7 @@
 import 'package:erkatoy_afex_ai/design_system/components/adaptive_loading_view.dart';
 import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
 import 'package:erkatoy_afex_ai/design_system/components/retry_button.dart';
-import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/widget/daily_schedule_table.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/widget/daily_schedule_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -42,7 +42,7 @@ class _DailyScheduleScreenState extends State<DailyScheduleScreen> {
         builder: (context, status) {
           switch (status) {
             case DailyScheduleStatus.onSuccess:
-              return const DailyScheduleTable();
+              return const DailyScheduleListView();
 
             case DailyScheduleStatus.onLoading:
               return const Center(child: AdaptiveLoadingView());

@@ -9,13 +9,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class RegisterPasswordInput extends StatelessWidget {
   const RegisterPasswordInput({
     super.key,
-    required this.formKey,
     required this.focusNode,
     required this.controller,
     required this.onKeyboardNextBtnPressed,
   });
 
-  final GlobalKey<FormState> formKey;
   final FocusNode focusNode;
   final TextEditingController controller;
   final VoidCallback onKeyboardNextBtnPressed;
@@ -36,7 +34,6 @@ class RegisterPasswordInput extends StatelessWidget {
             ),
             getHeightSize4,
             ErkatoyTextField.passwordMode(
-              formKey: formKey,
               hintText: 'Parolni kiriting',
               controller: controller,
               obscureText: obscureState,

@@ -5,6 +5,9 @@ enum RegisterStatus { pure, onSuccessful, onShowMessage }
 class RegisterState extends Equatable {
   const RegisterState({
     this.status = RegisterStatus.pure,
+    this.phoneNumber = '',
+    this.password = '',
+    this.rePassword = '',
     this.obscureState = true,
     this.reObscureState = true,
     this.message,
@@ -12,6 +15,9 @@ class RegisterState extends Equatable {
   });
 
   final RegisterStatus status;
+  final String phoneNumber;
+  final String password;
+  final String rePassword;
   final bool obscureState;
   final bool reObscureState;
   final String? message;
@@ -19,6 +25,9 @@ class RegisterState extends Equatable {
 
   RegisterState copyWith({
     RegisterStatus? status,
+    String? phoneNumber,
+    String? password,
+    String? rePassword,
     bool? obscureState,
     bool? reObscureState,
     String? message,
@@ -26,6 +35,9 @@ class RegisterState extends Equatable {
   }) =>
       RegisterState(
         status: status ?? this.status,
+        phoneNumber: phoneNumber ?? this.phoneNumber,
+        password: password ?? this.password,
+        rePassword: rePassword ?? this.rePassword,
         obscureState: obscureState ?? this.obscureState,
         reObscureState: reObscureState ?? this.reObscureState,
         message: message ?? this.message,
@@ -33,5 +45,6 @@ class RegisterState extends Equatable {
       );
 
   @override
-  List<Object?> get props => [status, obscureState, reObscureState, message, onLoading];
+  List<Object?> get props =>
+      [status, phoneNumber, password, rePassword, obscureState, reObscureState, message, onLoading];
 }

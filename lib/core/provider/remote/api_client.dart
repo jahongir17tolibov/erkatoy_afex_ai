@@ -9,7 +9,7 @@ class ApiClient {
   ApiClient({required HiveLocalStorage localStorage}) : _localStorage = localStorage;
 
   final HiveLocalStorage _localStorage;
-  final String _baseUrl = 'http://test.eva.softex.uz/';
+  final String _baseUrl = 'http://194.163.146.155:8000/';
 
   Dio get getDio {
     final BaseOptions baseOptions = BaseOptions(
@@ -51,6 +51,7 @@ class ApiClient {
         key: HiveConstants.authTokenKey,
       );
 
+  Future<String?> get getBearerToken => _getBearerToken();
   Options get postOptions => _postOptions();
   FutureOr<Options> get getOptions => _getOptions();
   FutureOr<Options> get postOptionsWithBearer => _postWithBearer();

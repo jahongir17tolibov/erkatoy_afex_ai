@@ -2,7 +2,6 @@ import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/adaptive_loading_view.dart';
 import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
-import 'package:erkatoy_afex_ai/design_system/components/single_child_scroll_with_size.dart';
 import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
@@ -40,15 +39,15 @@ class CreatingAccountScreen extends StatefulWidget {
 }
 
 class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
+  final TextEditingController _weightEditingController = TextEditingController();
   final GlobalKey<FormState> _weightFormKey = GlobalKey<FormState>();
-  final _weightEditingController = TextEditingController();
 
   @override
   void initState() {
-    _weightEditingController.addListener(() {
-      String weightValue = _weightEditingController.text;
-      context.read<CreateAccountBloc>().add(OnWeightEditingCreateAccEvent(weightValue));
-    });
+    if (widget.phone.isEmpty) {
+      Future.microtask(() => context.read<CreateAccountBloc>().add(OnGetChildInfoCreateAccEvent()));
+    }
+    _listenController();
     super.initState();
   }
 
@@ -64,8 +63,10 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
         listener: (context, state) {
           if (state.status == CreateAccountStatus.onShowMessage) {
             context.showSnackBar(state.message);
-          } else if (state.status == CreateAccountStatus.onSuccess) {
+          } else if (state.status == CreateAccountStatus.onSuccessfulCreated) {
             HomeScreen.open(context);
+          } else if (state.status == CreateAccountStatus.onSuccessfulUpdated) {
+            context.pop();
           }
 
           if (state.onLoading != null) {
@@ -74,94 +75,92 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
                 : AdaptiveLoadingView.hideLoadingDialog(context);
           }
         },
-        child: SingleChildScrollWithSize(
-          statusBarHeight: MediaQuery.of(context).viewPadding.top,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          screenWithAppBar: true,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              // Container(
-              //   margin: getPaddingAll16,
-              //   decoration: BoxDecoration(
-              //     borderRadius: getCustomBorder(400),
-              //     border: Border.fromBorderSide(
-              //       BorderSide(color: context.themeColors.secondary, width: 8),
-              //     ),
-              //   ),
-              //   child: Padding(
-              //     padding: getPaddingAll4,
-              //     child: ClipRRect(
-              //       borderRadius: getCustomBorder(400),
-              //       child: SvgPicture.asset(
-              //         ImagesConstants.gradientImg,
-              //         width: 200,
-              //         height: 200,
-              //         fit: BoxFit.cover,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              Image.asset(ImagesConstants.appLogo, fit: BoxFit.cover, width: 1.screenWidth(context), height: 200),
-              TextView(
-                text: 'Xush kelibsiz!',
-                textSize: 32.textSize(context),
-                textColor: context.themeColors.onSurface,
-              ),
-              getHeightSize10,
-              Container(
-                width: 1.screenWidth(context),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 0.08.screenWidth(context),
-                  vertical: 16,
-                ),
-                decoration: BoxDecoration(
-                  color: context.themeColors.secondary,
-                  borderRadius: getBorderAll20,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: <Widget>[
+                  Image.asset(
+                    ImagesConstants.appLogo,
+                    fit: BoxFit.cover,
+                    width: 1.screenWidth(context),
+                    height: 200,
+                  ),
+                  if (widget.phone.isNotEmpty)
                     TextView(
-                      text:
-                          "Ro`yxatdan o`tishni yakunlash uchun\nFarzandingiz ma'lumotlarini kiriting",
-                      textSize: 16.textSize(context),
-                      textColor: context.themeColors.onSecondary,
-                      fontWeight: FontWeight.w500,
-                      textAlign: TextAlign.center,
+                      text: 'Xush kelibsiz!',
+                      textSize: 32.textSize(context),
+                      textColor: context.themeColors.onSurface,
                     ),
-                    getHeightSize20,
-                    const ChangeBirthDate(),
-                    getHeightSize20,
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
+                  getHeightSize10,
+                  Container(
+                    width: 1.screenWidth(context),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 0.08.screenWidth(context),
+                      vertical: 16,
+                    ),
+                    decoration: BoxDecoration(
+                      color: context.themeColors.secondary,
+                      borderRadius: getBorderAll20,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        const GenderPopUp(),
-                        const Spacer(),
-                        getWidthSize4,
-                        WeightInput(
-                          weightKey: _weightFormKey,
-                          controller: _weightEditingController,
-                        ),
-                        getWidthSize6,
-                        TextView.boldStyle(
-                          text: 'KG',
-                          textColor: context.themeColors.onSurface,
+                        TextView(
+                          text: widget.phone.isEmpty
+                              ? 'Farzandingiz ma`lumotlarini yangilash'
+                              : "Ro`yxatdan o`tishni yakunlash uchun\nFarzandingiz ma'lumotlarini kiriting",
                           textSize: 16.textSize(context),
+                          textColor: context.themeColors.onSecondary,
+                          fontWeight: FontWeight.w500,
+                          textAlign: TextAlign.center,
+                        ),
+                        getHeightSize20,
+                        const ChangeBirthDate(),
+                        getHeightSize20,
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            const GenderPopUp(),
+                            const Spacer(),
+                            getWidthSize4,
+                            WeightInput(controller: _weightEditingController),
+                            getWidthSize6,
+                            TextView.boldStyle(
+                              text: 'KG',
+                              textColor: context.themeColors.onSurface,
+                              textSize: 16.textSize(context),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const Spacer(),
-              StartButton(phone: widget.phone, pass: widget.password),
-              getHeightSize8,
-            ],
-          ),
+            ),
+            const Spacer(),
+            StartButton(phone: widget.phone, pass: widget.password),
+            getHeightSize8,
+          ],
         ),
       ),
     );
+  }
+
+  void _listenController() {
+    _weightEditingController.addListener(() {
+      String value = _weightEditingController.text;
+      context.read<CreateAccountBloc>().add(OnInputWeightCreateAccEvent(value));
+    });
+  }
+
+  @override
+  void dispose() {
+    _weightEditingController.dispose();
+    super.dispose();
   }
 }

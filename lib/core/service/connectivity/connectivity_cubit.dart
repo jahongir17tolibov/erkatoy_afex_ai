@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
-import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 
 part 'connectivity_state.dart';
 

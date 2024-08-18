@@ -28,7 +28,7 @@ class SettingsListTile extends StatelessWidget {
           padding: removePadding ? EdgeInsets.zero : getPaddingAll10,
           child: TextView(
             text: text,
-            textSize: 18.textSize(context),
+            textSize: 16.textSize(context),
             textColor: context.themeColors.onSecondary,
           ),
         ),

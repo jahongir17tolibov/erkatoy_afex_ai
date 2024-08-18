@@ -9,6 +9,7 @@ abstract interface class AuthRemoteSource {
     required String birthDayDate,
     required String gender,
     required double weight,
-    required String bearerToken,
   });
+
+  Future<ChildInfoDto> getChildInfo();
 }

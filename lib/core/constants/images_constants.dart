@@ -15,6 +15,7 @@ class ImagesConstants {
   static const String appLogo = 'assets/images/png/erkatoy_app_icon.png';
   static const String babyIconAi = 'assets/images/png/baby_icon_ai.png';
   static const String zenModeBckg = 'assets/images/png/zen_mode_bckg.jpg';
+  static const String zenMode2Bckg = 'assets/images/png/zen_mode_bckg_2.jpg';
 
   // music controls
   static const String pauseIcon = 'assets/images/png/pause.png';

@@ -35,20 +35,24 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const HomeAppBar(),
-      body: SingleChildScrollWithSize(
-        statusBarHeight: MediaQuery.of(context).viewPadding.top,
-        padding: EdgeInsets.symmetric(horizontal: 0.05.screenWidth(context)),
-        screenWithAppBar: true,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            getHeightSize6,
-            const ReasonForCryCard(),
-            getHeightSize20,
-            const DailyScheduleCard(),
-            getHeightSize20,
-            const HealthCard(),
-          ],
+      body: RefreshIndicator.adaptive(
+        onRefresh: () async {
+          context.read<HomeBloc>().add(OnGetCurrentActivityHomeEvent());
+        },
+        child: SingleChildScrollWithSize(
+          statusBarHeight: MediaQuery.of(context).viewPadding.top,
+          padding: EdgeInsets.symmetric(horizontal: 0.05.screenWidth(context)),
+          screenWithAppBar: true,
+          child: Column(
+            children: <Widget>[
+              getHeightSize10,
+              const ReasonForCryCard(),
+              getHeightSize20,
+              const DailyScheduleCard(),
+              getHeightSize20,
+              const HealthCard(),
+            ],
+          ),
         ),
       ),
     );

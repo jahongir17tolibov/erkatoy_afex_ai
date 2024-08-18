@@ -1,4 +1,3 @@
-import 'package:erkatoy_afex_ai/core/base/base_extensions.dart';
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/design_system/components/adaptive_loading_view.dart';
 import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
@@ -6,7 +5,6 @@ import 'package:erkatoy_afex_ai/design_system/components/phone_input.dart';
 import 'package:erkatoy_afex_ai/design_system/components/single_child_scroll_with_size.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
-import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/creating_account_screen.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/login/bloc/login_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/login/widget/login_button.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/login/widget/login_password_input.dart';
@@ -29,15 +27,21 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState> _validateForm = GlobalKey<FormState>();
+
   // phone input
   final FocusNode _phoneFocusNode = FocusNode();
-  final GlobalKey<FormState> _phoneForm = GlobalKey<FormState>();
   final TextEditingController _phoneEditingController = TextEditingController();
 
   // password input
   final FocusNode _passwordFocusNode = FocusNode();
-  final GlobalKey<FormState> _passwordForm = GlobalKey<FormState>();
   final TextEditingController _passwordEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    _initControllers();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,31 +66,24 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.symmetric(horizontal: 0.1.screenWidth(context)),
           screenWithAppBar: true,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                PhoneInput(
-                  formKey: _phoneForm,
-                  focusNode: _phoneFocusNode,
-                  controller: _phoneEditingController,
-                ),
-                getHeightSize10,
-                LoginPasswordInput(
-                  formKey: _passwordForm,
-                  focusNode: _passwordFocusNode,
-                  controller: _passwordEditingController,
-                ),
-                getHeightSize20,
-                LoginButton(onPressed: () {
-                  // CreatingAccountScreen.open(context, phone: _phoneEditingController.text, pass: _passwordEditingController.text);
-                  if (validationState) {
-                    context.read<LoginBloc>().add(OnLoginBtnPressedEvent(
-                          phoneNumber: _phoneEditingController.text,
-                          password: _passwordEditingController.text,
-                        ));
-                  }
-                }),
-              ],
+            child: Form(
+              key: _validateForm,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  PhoneInput(
+                    focusNode: _phoneFocusNode,
+                    controller: _phoneEditingController,
+                  ),
+                  getHeightSize10,
+                  LoginPasswordInput(
+                    focusNode: _passwordFocusNode,
+                    controller: _passwordEditingController,
+                  ),
+                  getHeightSize20,
+                  LoginButton(validateState: validationState),
+                ],
+              ),
             ),
           ),
         ),
@@ -94,15 +91,17 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  bool get validationState {
-    final phoneFormState = _phoneForm.currentState;
-    final passwordFormState = _passwordForm.currentState;
-    if (phoneFormState != null && passwordFormState != null) {
-      if (context.getConnectivity && phoneFormState.validate() && passwordFormState.validate()) {
-        return true;
-      }
-    }
-    return false;
+  bool get validationState => _validateForm.currentState?.validate() ?? false;
+
+  void _initControllers() {
+    _phoneEditingController.addListener(() {
+      String value = _phoneEditingController.text;
+      context.read<LoginBloc>().add(OnInputPhoneLoginEvent(value));
+    });
+    _passwordEditingController.addListener(() {
+      String value = _passwordEditingController.text;
+      context.read<LoginBloc>().add(OnInputPasswordLoginEvent(value));
+    });
   }
 
   @override

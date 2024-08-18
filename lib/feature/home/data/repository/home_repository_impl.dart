@@ -36,10 +36,9 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<CurrentActivityResult> getCurrentActivityFromApi() {
     return _remoteSource.getCurrentActivityResponse().then((data) {
       if (data.detail == null) {
-        final String activity = '${data.time} - ${data.activity}';
-        return CurrentActivityResult(data: activity);
+        return CurrentActivityResult(data: data.toActivitySchedule());
       }
-      return CurrentActivityResult(errorMessage: data.detail!);
+      return CurrentActivityResult(errorMessage: data.detail ?? data.message);
     });
   }
 

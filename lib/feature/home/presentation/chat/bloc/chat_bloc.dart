@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/entity/chat.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/get_cached_chats_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/request_to_ai_chat_use_case.dart';
@@ -10,7 +9,6 @@ import 'package:erkatoy_afex_ai/feature/home/domain/use_case/save_chat_to_db_use
 import 'package:intl/intl.dart';
 
 part 'chat_event.dart';
-
 part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
@@ -50,7 +48,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) async {
     final Chat chat = Chat(
       id: state.chatsList.length + 1,
-      request: event.message,
+      request: event.message.trim(),
       requestTime: _getCurrentTime(),
       isUser: true,
     );

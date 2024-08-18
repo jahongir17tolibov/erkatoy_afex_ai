@@ -8,12 +8,10 @@ import 'package:flutter/material.dart';
 class PhoneInput extends StatelessWidget {
   const PhoneInput({
     super.key,
-    required this.formKey,
     required this.focusNode,
     required this.controller,
   });
 
-  final GlobalKey<FormState> formKey;
   final FocusNode focusNode;
   final TextEditingController controller;
 
@@ -30,7 +28,6 @@ class PhoneInput extends StatelessWidget {
         ),
         getHeightSize4,
         ErkatoyTextField(
-          formKey: formKey,
           hintText: '+9989',
           controller: controller,
           focusNode: focusNode,
