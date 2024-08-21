@@ -40,7 +40,6 @@ class CreatingAccountScreen extends StatefulWidget {
 
 class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
   final TextEditingController _weightEditingController = TextEditingController();
-  final GlobalKey<FormState> _weightFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {

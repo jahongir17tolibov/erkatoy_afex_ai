@@ -18,6 +18,7 @@ class ErkatoyTextField extends StatelessWidget {
     this.onEditingComplete,
     this.maxLength,
     this.hideErrorText = false,
+    this.formKey,
   })  : isReadOnly = false,
         obscureText = false,
         onPressSuffixBtn = null,
@@ -33,6 +34,7 @@ class ErkatoyTextField extends StatelessWidget {
     this.onEditingComplete,
     this.onTap,
     this.maxLength,
+    this.formKey,
   })  : isReadOnly = true,
         obscureText = false,
         textInputType = TextInputType.none,
@@ -53,12 +55,14 @@ class ErkatoyTextField extends StatelessWidget {
     this.onEditingComplete,
     this.onTap,
     this.maxLength,
+    this.formKey,
   })  : isReadOnly = false,
         textInputType = TextInputType.visiblePassword,
         isExpand = false,
         removeBorders = false,
         hideErrorText = false;
 
+  final GlobalKey<FormState>? formKey;
   final String hintText;
   final TextEditingController controller;
   final FocusNode? focusNode;

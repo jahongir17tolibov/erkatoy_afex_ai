@@ -6,9 +6,9 @@ import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/get_child_info_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/login_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/send_child_info_use_case.dart';
-import 'package:flutter/cupertino.dart';
 
 part 'create_account_event.dart';
+
 part 'create_account_state.dart';
 
 class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
@@ -72,15 +72,17 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
     OnStartButtonPressedCreateAccEvent event,
     Emitter<CreateAccountState> emit,
   ) async {
-    emit(state.copyWith(onLoading: true));
+    if (state.status != CreateAccountStatus.onShowMessage) {
+      emit(state.copyWith(onLoading: true));
 
-    final login = await _loginPhoneNumber(emit, phone: event.phone, pass: event.pass);
-    if (login != null) {
-      await Future.delayed(const Duration(seconds: 3), () async {
-        await _sendChildInfo(emit);
-      });
+      final login = await _loginPhoneNumber(emit, phone: event.phone, pass: event.pass);
+      if (login != null) {
+        await Future.delayed(const Duration(seconds: 3), () async {
+          await _sendChildInfo(emit);
+        });
+      }
+      emit(state.copyWith(onLoading: null));
     }
-    emit(state.copyWith(onLoading: null));
   }
 
   Future<String?> _loginPhoneNumber(
@@ -105,9 +107,11 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
     OnUpdateChildInfoCreateAccEvent event,
     Emitter<CreateAccountState> emit,
   ) async {
-    emit(state.copyWith(onLoading: true));
-    await _sendChildInfo(emit, isUpdate: true);
-    emit(state.copyWith(onLoading: null));
+    if (state.status != CreateAccountStatus.onShowMessage) {
+      emit(state.copyWith(onLoading: true));
+      await _sendChildInfo(emit, isUpdate: true);
+      emit(state.copyWith(onLoading: null));
+    }
   }
 
   Future<void> _sendChildInfo(Emitter<CreateAccountState> emit, {bool isUpdate = false}) async {

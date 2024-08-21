@@ -7,6 +7,7 @@ class LoginState extends Equatable {
     this.status = LoginStatus.pure,
     this.phoneNumber = '',
     this.password = '',
+    this.isValid = false,
     this.obscureState = true,
     this.message,
     this.onLoading,
@@ -15,6 +16,7 @@ class LoginState extends Equatable {
   final LoginStatus status;
   final String phoneNumber;
   final String password;
+  final bool isValid;
   final bool obscureState;
   final String? message;
   final bool? onLoading;
@@ -23,6 +25,7 @@ class LoginState extends Equatable {
     LoginStatus? status,
     String? phoneNumber,
     String? password,
+    bool? isValid,
     bool? obscureState,
     String? message,
     bool? onLoading,
@@ -31,11 +34,13 @@ class LoginState extends Equatable {
         status: status ?? this.status,
         phoneNumber: phoneNumber ?? this.phoneNumber,
         password: password ?? this.password,
+        isValid: isValid ?? this.isValid,
         obscureState: obscureState ?? this.obscureState,
         message: message ?? this.message,
         onLoading: onLoading ?? this.onLoading,
       );
 
   @override
-  List<Object?> get props => [status, phoneNumber, password, obscureState, message, onLoading];
+  List<Object?> get props =>
+      [status, phoneNumber, password, isValid, obscureState, message, onLoading];
 }

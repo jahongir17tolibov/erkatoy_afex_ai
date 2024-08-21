@@ -23,6 +23,7 @@ import 'package:erkatoy_afex_ai/feature/home/presentation/chat/bloc/chat_bloc.da
 import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/bloc/daily_schedule_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/health/bloc/health_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.dart';
+import 'package:erkatoy_afex_ai/feature/on_boarding/cubit/on_boarding_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import 'core/provider/local/hive_local_storage.dart';
@@ -42,6 +43,8 @@ Future<void> configureDependencies() async {
     ..registerFactory<ChangeLangBloc>(
       () => ChangeLangBloc(localStorage: getIt<HiveLocalStorage>()),
     )
+    ..registerFactory<OnBoardingCubit>(
+        () => OnBoardingCubit(localStorage: getIt<HiveLocalStorage>()))
 
     /// auth
     ..registerLazySingleton<AuthRemoteSource>(

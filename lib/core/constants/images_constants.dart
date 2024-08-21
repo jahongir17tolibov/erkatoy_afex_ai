@@ -16,6 +16,9 @@ class ImagesConstants {
   static const String babyIconAi = 'assets/images/png/baby_icon_ai.png';
   static const String zenModeBckg = 'assets/images/png/zen_mode_bckg.jpg';
   static const String zenMode2Bckg = 'assets/images/png/zen_mode_bckg_2.jpg';
+  static const String aiBotImg = 'assets/images/png/ai_chat_bot_img.jpg';
+  static const String motherAndBabyImg = 'assets/images/png/mother_and_child_img.webp';
+  static const String childHealthImg = 'assets/images/png/child_health_img.jpeg';
 
   // music controls
   static const String pauseIcon = 'assets/images/png/pause.png';

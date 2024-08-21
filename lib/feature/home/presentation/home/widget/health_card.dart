@@ -1,5 +1,4 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
-import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/scale_on_press_button.dart';
 import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
@@ -8,8 +7,11 @@ import 'package:erkatoy_afex_ai/feature/home/presentation/home/widget/home_cards
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HealthCard extends StatelessWidget {
-  const HealthCard({super.key});
+class HomeIconTextCard extends StatelessWidget {
+  const HomeIconTextCard({super.key, required this.iconAsset, required this.text});
+
+  final String iconAsset;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +23,14 @@ class HealthCard extends StatelessWidget {
         child: Row(
           children: <Widget>[
             SvgPicture.asset(
-              ImagesConstants.healthIconSvg,
+              iconAsset,
               width: 32,
               height: 32,
               colorFilter: ColorFilter.mode(context.themeColors.onSecondary, BlendMode.srcIn),
             ),
             getWidthSize16,
             TextView.boldStyle(
-              text: 'Salomatlik',
+              text: text,
               textSize: 20.textSize(context),
               textColor: context.themeColors.onSecondary,
             ),

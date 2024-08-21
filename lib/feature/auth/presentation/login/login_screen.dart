@@ -68,6 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Center(
             child: Form(
               key: _validateForm,
+              onChanged: _onFormChanged,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -81,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordEditingController,
                   ),
                   getHeightSize20,
-                  LoginButton(validateState: validationState),
+                  const LoginButton(),
                 ],
               ),
             ),
@@ -90,8 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  bool get validationState => _validateForm.currentState?.validate() ?? false;
 
   void _initControllers() {
     _phoneEditingController.addListener(() {
@@ -102,6 +101,13 @@ class _LoginScreenState extends State<LoginScreen> {
       String value = _passwordEditingController.text;
       context.read<LoginBloc>().add(OnInputPasswordLoginEvent(value));
     });
+  }
+
+  void _onFormChanged() {
+    if (_phoneEditingController.text.isNotEmpty && _passwordEditingController.text.isNotEmpty) {
+      final isValid = _validateForm.currentState!.validate();
+      context.read<LoginBloc>().add(OnValidateFormLoginEvent(isValid));
+    }
   }
 
   @override

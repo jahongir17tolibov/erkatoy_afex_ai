@@ -25,9 +25,23 @@ class ZenModeScreen extends StatefulWidget {
   State<ZenModeScreen> createState() => _ZenModeScreenState();
 }
 
-class _ZenModeScreenState extends State<ZenModeScreen> {
+class _ZenModeScreenState extends State<ZenModeScreen> with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<double> _animation;
+
   @override
   void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOut,
+      ),
+    );
     Future.microtask(() => context.read<ZenBloc>().add(OnInitialZenEvent()));
     super.initState();
   }
@@ -36,11 +50,15 @@ class _ZenModeScreenState extends State<ZenModeScreen> {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Image.asset(
-          ImagesConstants.zenMode2Bckg,
-          width: 1.screenWidth(context),
-          height: 1.screenHeight(context),
-          fit: BoxFit.cover,
+        AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) => Transform.scale(scale: _animation.value, child: child),
+          child: Image.asset(
+            ImagesConstants.zenMode2Bckg,
+            width: 1.screenWidth(context),
+            height: 1.screenHeight(context),
+            fit: BoxFit.cover,
+          ),
         ),
         Scaffold(
           backgroundColor: Colors.transparent,
@@ -73,11 +91,18 @@ class _ZenModeScreenState extends State<ZenModeScreen> {
                 const AudioDurationText(),
                 getHeightSize10,
                 const AudioControlsRow(),
+                SizedBox(height: 0.1.screenHeight(context)),
               ],
             ),
           ),
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

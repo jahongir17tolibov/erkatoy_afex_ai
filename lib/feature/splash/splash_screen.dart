@@ -8,6 +8,7 @@ import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/di.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/register/register_screen.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
+import 'package:erkatoy_afex_ai/feature/on_boarding/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,10 +64,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _initSplash() async {
     CustomNativeSplash.remove();
-    await Future.delayed(const Duration(seconds: 2), () {
-      getAuthToken().then((value) {
-        value == null ? RegisterScreen.open(context) : HomeScreen.open(context);
+    await Future.delayed(const Duration(seconds: 2), () async {
+      await getOnBoardingKey().then((value) async {
+        value
+            ? await getAuthToken().then((value) {
+                value == null ? RegisterScreen.open(context) : HomeScreen.open(context);
+              })
+            : OnBoardingScreen.open(context);
       });
+      if (!mounted) return;
       context.read<ConnectivityCubit>().observeConnectivity();
     });
   }
@@ -74,5 +80,15 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<String?> getAuthToken() async {
     return await getIt<HiveLocalStorage>()
         .getString(boxName: HiveConstants.authTokenBoxName, key: HiveConstants.authTokenKey);
+  }
+
+  Future<bool> getOnBoardingKey() async {
+    final llll = await getIt<HiveLocalStorage>().getBool(
+          boxName: HiveConstants.authTokenBoxName,
+          key: HiveConstants.onBoardingKey,
+        ) ??
+        false;
+    printOnDebug(llll);
+    return llll;
   }
 }

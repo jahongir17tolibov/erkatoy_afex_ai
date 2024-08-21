@@ -17,6 +17,8 @@ import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.da
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/nav_bar/scaffold_with_nav_bar.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/settings/presentation/settings_screen.dart';
+import 'package:erkatoy_afex_ai/feature/on_boarding/cubit/on_boarding_cubit.dart';
+import 'package:erkatoy_afex_ai/feature/on_boarding/on_boarding_screen.dart';
 import 'package:erkatoy_afex_ai/feature/splash/splash_screen.dart';
 import 'package:erkatoy_afex_ai/feature/zen/bloc/zen_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/zen/zen_mode_screen.dart';
@@ -48,6 +50,14 @@ class AppRouter {
             pageBuilder: (context, _) => _materialPage(BlocProvider(
               create: (_) => getIt<ChangeLangBloc>(),
               child: const ChangeLangScreen(),
+            )),
+          ),
+          GoRoute(
+            path: OnBoardingScreen.routeName,
+            name: OnBoardingScreen.routeName,
+            pageBuilder: (context, _) => _materialPage(BlocProvider(
+              create: (_) => getIt<OnBoardingCubit>(),
+              child: const OnBoardingScreen(),
             )),
           ),
         ],

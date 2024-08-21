@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterButton extends StatelessWidget {
-  const RegisterButton({super.key, required this.validationState});
-
-  final bool validationState;
+  const RegisterButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RegisterBloc, RegisterState>(
-      builder: (context, state) {
+    return BlocSelector<RegisterBloc, RegisterState, bool>(
+      selector: (state) => state.formIsValidate,
+      builder: (context, formIsValidate) {
         return ErkatoyButton(
-          onPressed: validationState
+          onPressed: formIsValidate
               ? () {
                   FocusScope.of(context).unfocus();
                   // HomeScreen.open(context);

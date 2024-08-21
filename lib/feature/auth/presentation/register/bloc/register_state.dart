@@ -8,6 +8,7 @@ class RegisterState extends Equatable {
     this.phoneNumber = '',
     this.password = '',
     this.rePassword = '',
+    this.formIsValidate = false,
     this.obscureState = true,
     this.reObscureState = true,
     this.message,
@@ -18,6 +19,7 @@ class RegisterState extends Equatable {
   final String phoneNumber;
   final String password;
   final String rePassword;
+  final bool formIsValidate;
   final bool obscureState;
   final bool reObscureState;
   final String? message;
@@ -28,6 +30,7 @@ class RegisterState extends Equatable {
     String? phoneNumber,
     String? password,
     String? rePassword,
+    bool? formIsValidate,
     bool? obscureState,
     bool? reObscureState,
     String? message,
@@ -38,6 +41,7 @@ class RegisterState extends Equatable {
         phoneNumber: phoneNumber ?? this.phoneNumber,
         password: password ?? this.password,
         rePassword: rePassword ?? this.rePassword,
+        formIsValidate: formIsValidate ?? this.formIsValidate,
         obscureState: obscureState ?? this.obscureState,
         reObscureState: reObscureState ?? this.reObscureState,
         message: message ?? this.message,
@@ -45,6 +49,15 @@ class RegisterState extends Equatable {
       );
 
   @override
-  List<Object?> get props =>
-      [status, phoneNumber, password, rePassword, obscureState, reObscureState, message, onLoading];
+  List<Object?> get props => [
+        status,
+        phoneNumber,
+        password,
+        rePassword,
+        formIsValidate,
+        obscureState,
+        reObscureState,
+        message,
+        onLoading
+      ];
 }

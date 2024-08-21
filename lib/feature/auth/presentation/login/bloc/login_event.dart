@@ -17,3 +17,9 @@ final class OnInputPasswordLoginEvent extends LoginEvent {
 
   final String value;
 }
+
+final class OnValidateFormLoginEvent extends LoginEvent {
+  OnValidateFormLoginEvent(this.value);
+
+  final bool value;
+}

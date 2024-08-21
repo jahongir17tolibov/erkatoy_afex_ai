@@ -1,4 +1,3 @@
-import 'package:erkatoy_afex_ai/core/base/base_extensions.dart';
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/design_system/components/adaptive_loading_view.dart';
 import 'package:erkatoy_afex_ai/design_system/components/single_child_scroll_with_size.dart';
@@ -31,18 +30,19 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final GlobalKey<FormState> _validateForm = GlobalKey<FormState>();
+  final _validateForm = GlobalKey<FormState>();
+
   // phone input
   final FocusNode _phoneFocusNode = FocusNode();
   final TextEditingController _phoneEditingController = TextEditingController();
 
   // password input
-  final FocusNode _rePasswordFocusNode = FocusNode();
-  final TextEditingController _rePasswordEditingController = TextEditingController();
-
-  // password input
   final FocusNode _passwordFocusNode = FocusNode();
   final TextEditingController _passwordEditingController = TextEditingController();
+
+  // re-password input
+  final FocusNode _rePasswordFocusNode = FocusNode();
+  final TextEditingController _rePasswordEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -83,6 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Center(
             child: Form(
               key: _validateForm,
+              onChanged: _onFormChanged,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -104,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: _rePasswordEditingController,
                   ),
                   getHeightSize20,
-                  RegisterButton(validationState: validationState),
+                  const RegisterButton(),
                   getHeightSize8,
                   const AlreadySignedTextButton(),
                 ],
@@ -116,7 +117,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  bool get validationState => _validateForm.currentState?.validate() ?? false;
+  void _onFormChanged() {
+    if (_phoneEditingController.text.isNotEmpty &&
+        _passwordEditingController.text.isNotEmpty &&
+        _rePasswordEditingController.text.isNotEmpty) {
+      final isValid = _validateForm.currentState!.validate();
+      context.read<RegisterBloc>().add(OnValidateChangedRegisterEvent(isValid));
+    }
+  }
 
   void _initControllers() {
     _phoneEditingController.addListener(() {

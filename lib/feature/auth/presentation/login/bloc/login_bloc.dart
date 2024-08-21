@@ -15,6 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<OnInputPasswordLoginEvent>(_onInputPasswordLoginEvent);
     on<OnObscurePressedLoginEvent>(_onObscurePressedLoginEvent);
     on<OnLoginBtnPressedEvent>(_onLoginBtnPressedEvent);
+    on<OnValidateFormLoginEvent>(_onValidateFormLoginEvent);
   }
 
   final LoginUseCase loginUseCase;
@@ -30,28 +31,30 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     OnLoginBtnPressedEvent event,
     Emitter<LoginState> emit,
   ) async {
-    emit(state.copyWith(onLoading: true));
-    await loginUseCase
-        .execute(phone: state.phoneNumber, password: state.password)
-        .then((result) async {
-      if (result.errorMessage == null) {
-        emit(state.copyWith(
-          status: LoginStatus.onShowMessage,
-          message: '${state.phoneNumber} raqam bilan kirdingiz!',
-          onLoading: false,
-        ));
-        await Future.delayed(const Duration(milliseconds: 1700), () {
-          emit(state.copyWith(status: LoginStatus.onSuccessful));
-        });
-      } else {
-        emit(state.copyWith(
-          status: LoginStatus.onShowMessage,
-          message: result.errorMessage,
-          onLoading: false,
-        ));
-      }
-    });
-    emit(state.copyWith(onLoading: null));
+    if (state.status != LoginStatus.onShowMessage) {
+      emit(state.copyWith(onLoading: true));
+      await loginUseCase
+          .execute(phone: state.phoneNumber, password: state.password)
+          .then((result) async {
+        if (result.errorMessage == null) {
+          emit(state.copyWith(
+            status: LoginStatus.onShowMessage,
+            message: '${state.phoneNumber} raqam bilan kirdingiz!',
+            onLoading: false,
+          ));
+          await Future.delayed(const Duration(milliseconds: 1700), () {
+            emit(state.copyWith(status: LoginStatus.onSuccessful));
+          });
+        } else {
+          emit(state.copyWith(
+            status: LoginStatus.onShowMessage,
+            message: result.errorMessage,
+            onLoading: false,
+          ));
+        }
+      });
+      emit(state.copyWith(onLoading: null));
+    }
   }
 
   FutureOr<void> _onInputPhoneLoginEvent(
@@ -66,5 +69,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     Emitter<LoginState> emit,
   ) {
     emit(state.copyWith(password: event.value));
+  }
+
+  FutureOr<void> _onValidateFormLoginEvent(
+    OnValidateFormLoginEvent event,
+    Emitter<LoginState> emit,
+  ) {
+    emit(state.copyWith(isValid: event.value));
   }
 }

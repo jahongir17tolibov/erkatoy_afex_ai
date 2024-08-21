@@ -13,8 +13,9 @@ class ErkatoyButton extends StatelessWidget {
     this.textColor,
     this.textSize,
     this.borderRadius = 12,
-    this.removeSplash = false,
     this.textToLeft = false,
+    this.boldStyledTextEnabled = false,
+    this.elevation,
   })  : isOutlined = false,
         borderSideColor = null;
 
@@ -28,8 +29,9 @@ class ErkatoyButton extends StatelessWidget {
     this.textSize,
     this.borderRadius = 12,
     this.borderSideColor,
-    this.removeSplash = false,
     this.textToLeft = false,
+    this.boldStyledTextEnabled = false,
+    this.elevation,
   })  : isOutlined = true,
         buttonColor = null;
 
@@ -43,8 +45,9 @@ class ErkatoyButton extends StatelessWidget {
   final double borderRadius;
   final bool isOutlined;
   final Color? borderSideColor;
-  final bool removeSplash;
   final bool textToLeft;
+  final bool boldStyledTextEnabled;
+  final double? elevation;
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +58,9 @@ class ErkatoyButton extends StatelessWidget {
       highlightColor: Colors.transparent,
       disabledColor: context.themeColors.onSurface.withOpacity(0.4),
       disabledTextColor: context.themeColors.surface,
-      highlightElevation: removeSplash ? 0 : null,
-      elevation: removeSplash ? 0 : null,
       minWidth: buttonWidth,
       height: buttonHeight,
+      elevation: elevation,
       color: isOutlined ? context.themeColors.surface : buttonColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
@@ -66,7 +68,12 @@ class ErkatoyButton extends StatelessWidget {
       ),
       child: Align(
         alignment: textToLeft ? Alignment.centerLeft : Alignment.center,
-        child: TextView(text: text, textColor: textColor, textSize: textSize),
+        child: TextView(
+          text: text,
+          textColor: textColor,
+          textSize: textSize,
+          fontWeight: boldStyledTextEnabled ? FontWeight.bold : null,
+        ),
       ),
     );
   }

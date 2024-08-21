@@ -17,7 +17,7 @@ class AudioDurationText extends StatelessWidget {
           padding: getPaddingAll10,
           child: TextView(
             text: liveDuration,
-            textSize: 16.textSize(context),
+            textSize: 20.textSize(context),
             textColor: Colors.orangeAccent,
           ),
         );

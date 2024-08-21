@@ -31,7 +31,6 @@ class ChangeBirthDate extends StatelessWidget {
           text: changedDate == null ? 'Tug`ilgan sanasi' : normalDateTimeFormat(changedDate),
           textColor: context.themeColors.onSurface.withOpacity(changedDate == null ? 0.7 : 1.0),
           textSize: 16.textSize(context),
-          removeSplash: true,
           textToLeft: true,
         );
       },
