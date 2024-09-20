@@ -23,8 +23,7 @@ class OnBoardingPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           const Spacer(),
-          Image.asset(image, height: 300, fit: BoxFit.cover),
-          const Spacer(),
+          Image.asset(image, height: 260, fit: BoxFit.cover),
           TextView.boldStyle(
             text: title,
             textSize: 24.textSize(context),
@@ -35,12 +34,11 @@ class OnBoardingPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 0.05.screenWidth(context)),
             child: TextView(
               text: subtitle,
-              textColor: context.themeColors.onSurface,
-              textSize: 16.textSize(context),
+              textColor: Colors.grey,
+              textSize: 14.textSize(context),
               textAlign: TextAlign.center,
             ),
           ),
-          getHeightSize20,
         ],
       ),
     );

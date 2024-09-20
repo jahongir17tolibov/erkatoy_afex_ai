@@ -1,5 +1,4 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
-import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:flutter/material.dart';
 
 class AdaptiveLoadingView extends StatelessWidget {
@@ -29,11 +28,6 @@ class AdaptiveLoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: CircularProgressIndicator.adaptive(
-        // backgroundColor: color ?? context.themeColors.primary,
-        strokeCap: StrokeCap.round,
-      ),
-    );
+    return const Center(child: CircularProgressIndicator.adaptive(strokeCap: StrokeCap.round));
   }
 }

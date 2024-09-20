@@ -3,6 +3,8 @@ import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
 import 'package:erkatoy_afex_ai/design_system/components/single_child_scroll_with_size.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/chat/chat_screen.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/health/health_tips_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -51,9 +53,21 @@ class _HomeScreenState extends State<HomeScreen> {
               getHeightSize20,
               const DailyScheduleCard(),
               getHeightSize20,
-              const HomeIconTextCard(iconAsset: ImagesConstants.healthIconSvg, text: 'Salomatlik'),
+              HomeIconTextCard(
+                onPressed: () {
+                  HealthTipsScreen.open(context);
+                },
+                iconAsset: ImagesConstants.healthIconSvg,
+                text: 'Salomatlik',
+              ),
               getHeightSize20,
-              const HomeIconTextCard(iconAsset: ImagesConstants.chatIconSvg, text: 'Chatbot'),
+              HomeIconTextCard(
+                onPressed: () {
+                  ChatScreen.open(context);
+                },
+                iconAsset: ImagesConstants.chatIconSvg,
+                text: 'Chatbot',
+              ),
             ],
           ),
         ),

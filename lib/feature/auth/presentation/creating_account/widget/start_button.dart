@@ -16,21 +16,26 @@ class StartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateAccountBloc, CreateAccountState>(
       builder: (context, state) {
+        printOnDebug('$phone with $pass');
         final bool buttonState = (state.gender != null) &&
             state.weight.isNotEmpty &&
             (state.birthdayDate != null) &&
             context.getConnectivity;
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: getPaddingAll20,
           child: ErkatoyButton(
             onPressed: buttonState
                 ? () {
-                    context.read<CreateAccountBloc>().add(phone.isNotEmpty
-                        ? OnStartButtonPressedCreateAccEvent(phone, pass)
-                        : OnUpdateChildInfoCreateAccEvent());
+                    context.unFocusingKeyboard(() async {
+                      await Future.delayed(const Duration(milliseconds: 500), () {
+                        context.read<CreateAccountBloc>().add(phone.isNotEmpty
+                            ? OnStartButtonPressedCreateAccEvent(phone, pass)
+                            : OnUpdateChildInfoCreateAccEvent());
+                      });
+                    });
                   }
                 : null,
-            text: phone.isNotEmpty ? 'Boshlash' : 'Yangilash',
+            text: phone.isNotEmpty ? 'Qani boshladik unda' : 'Saqlash',
             buttonHeight: 48,
             textColor: context.themeColors.onPrimary,
             buttonColor: context.themeColors.primary,

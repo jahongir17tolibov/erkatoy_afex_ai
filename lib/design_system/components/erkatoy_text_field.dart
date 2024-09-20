@@ -1,8 +1,9 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
+import 'package:erkatoy_afex_ai/core/constants/app_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
+import 'package:erkatoy_afex_ai/design_system/theme/app_colors.dart';
 import 'package:flutter/material.dart';
-
-import 'google_font_style.dart';
+import 'package:flutter/services.dart';
 
 class ErkatoyTextField extends StatelessWidget {
   const ErkatoyTextField({
@@ -18,10 +19,10 @@ class ErkatoyTextField extends StatelessWidget {
     this.onEditingComplete,
     this.maxLength,
     this.hideErrorText = false,
-    this.formKey,
+    this.suffixIcon,
+    this.inputFormatters,
   })  : isReadOnly = false,
         obscureText = false,
-        onPressSuffixBtn = null,
         onTap = null;
 
   const ErkatoyTextField.readOnlyMode({
@@ -34,13 +35,13 @@ class ErkatoyTextField extends StatelessWidget {
     this.onEditingComplete,
     this.onTap,
     this.maxLength,
-    this.formKey,
+    this.suffixIcon,
+    this.inputFormatters,
   })  : isReadOnly = true,
         obscureText = false,
         textInputType = TextInputType.none,
         isExpand = false,
         removeBorders = true,
-        onPressSuffixBtn = null,
         hideErrorText = true;
 
   const ErkatoyTextField.passwordMode({
@@ -48,36 +49,36 @@ class ErkatoyTextField extends StatelessWidget {
     required this.hintText,
     this.focusNode,
     this.validator,
-    this.onPressSuffixBtn,
     required this.controller,
     required this.obscureText,
     this.inputActionIsNext = true,
     this.onEditingComplete,
     this.onTap,
     this.maxLength,
-    this.formKey,
+    this.suffixIcon,
+    this.inputFormatters,
   })  : isReadOnly = false,
         textInputType = TextInputType.visiblePassword,
         isExpand = false,
         removeBorders = false,
         hideErrorText = false;
 
-  final GlobalKey<FormState>? formKey;
   final String hintText;
   final TextEditingController controller;
   final FocusNode? focusNode;
   final TextInputType textInputType;
   final String? Function(String?)? validator;
+  final Widget? suffixIcon;
   final int? maxLength;
   final bool obscureText;
   final bool isReadOnly;
   final bool isExpand;
   final VoidCallback? onTap;
-  final VoidCallback? onPressSuffixBtn;
   final VoidCallback? onEditingComplete;
   final bool removeBorders;
   final bool inputActionIsNext;
   final bool hideErrorText;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +92,13 @@ class ErkatoyTextField extends StatelessWidget {
       keyboardType: textInputType,
       cursorOpacityAnimates: true,
       obscureText: obscureText,
+      obscuringCharacter: '●',
       expands: isExpand,
       readOnly: isReadOnly,
       onEditingComplete: onEditingComplete,
       cursorErrorColor: Theme.of(context).colorScheme.error,
       onTap: onTap,
+      inputFormatters: inputFormatters,
       textCapitalization: (textInputType == TextInputType.name)
           ? TextCapitalization.sentences
           : TextCapitalization.none,
@@ -103,9 +106,10 @@ class ErkatoyTextField extends StatelessWidget {
         if (value == null || value.isEmpty) return 'Maydon bo`sh bo`lmasligi kerak!';
         return validator?.call(value);
       },
-      style: googleFontStyle(
-        fontSize: 16.textSize(context),
-        fontColor: Theme.of(context).colorScheme.onSurface,
+      style: TextStyle(
+        fontFamily: AppConstants.appFontStyle,
+        fontSize: 12,
+        color: context.themeColors.onSurface,
       ),
       decoration: InputDecoration(
         enabled: true,
@@ -114,45 +118,38 @@ class ErkatoyTextField extends StatelessWidget {
         counterText: '',
         fillColor: context.themeColors.surface,
         hintText: hintText,
-        errorStyle: googleFontStyle(
+        errorStyle: TextStyle(
+          fontFamily: AppConstants.appFontStyle,
           fontSize: (hideErrorText ? 0 : 11).textSize(context),
-          fontColor: context.themeColors.error,
+          color: context.themeColors.error,
         ),
-        hintStyle: googleFontStyle(fontSize: 16.textSize(context)),
+        hintStyle: const TextStyle(fontFamily: AppConstants.appFontStyle, fontSize: 12),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
+          borderSide: const BorderSide(color: AppColors.greyForLines, width: 0.2),
           borderRadius: getBorderAll10,
         ),
-        suffixIcon: textInputType == TextInputType.visiblePassword
-            ? IconButton(
-                onPressed: onPressSuffixBtn,
-                icon: Icon(
-                  !obscureText ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.grey,
-                ),
-              )
-            : null,
+        suffixIcon: suffixIcon,
         errorBorder: OutlineInputBorder(
-          borderRadius: getBorderAll8,
+          borderRadius: getBorderAll10,
           borderSide: adaptiveBorderSide(
             context,
             color: context.themeColors.error,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: getBorderAll8,
+          borderRadius: getBorderAll10,
           borderSide: adaptiveBorderSide(
             context,
             color: context.themeColors.primary,
-            width: 0.75,
+            width: 0.5,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: getBorderAll8,
+          borderRadius: getBorderAll10,
           borderSide: adaptiveBorderSide(
             context,
             color: context.themeColors.error,
-            width: 0.75,
+            width: 0.5,
           ),
         ),
       ),
@@ -161,7 +158,7 @@ class ErkatoyTextField extends StatelessWidget {
 
   BorderSide adaptiveBorderSide(BuildContext context, {required Color color, double? width}) {
     return removeBorders
-        ? const BorderSide(color: Colors.grey)
+        ? const BorderSide(color: AppColors.greyForLines)
         : BorderSide(color: color, width: width ?? 1.0);
   }
 }

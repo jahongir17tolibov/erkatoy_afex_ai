@@ -1,3 +1,4 @@
+import 'package:erkatoy_afex_ai/core/base/base_extensions.dart';
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
@@ -35,11 +36,12 @@ class ChatContainer extends StatelessWidget {
                       : context.themeColors.secondary,
                   borderRadius: getBorderAll16,
                 ),
-                child: TextView(
-                  text: message,
-                  textSize: 16.textSize(context),
-                  textColor:
-                      isUser ? context.themeColors.onSurface : context.themeColors.onSecondary,
+                child: Text.rich(
+                  message.parseMarkdown,
+                  style: TextStyle(
+                    fontSize: 16.textSize(context),
+                    color: isUser ? context.themeColors.onSurface : context.themeColors.onSecondary,
+                  ),
                 ),
               ),
               getHeightSize4,

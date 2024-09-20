@@ -1,19 +1,15 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
-import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/adaptive_loading_view.dart';
 import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
-import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
-import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
-import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/widget/weight_input.dart';
+import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/widget/account_card.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/constants/images_constants.dart';
 import 'bloc/create_account_bloc.dart';
-import 'widget/change_birth_date.dart';
-import 'widget/gender_pop_up.dart';
 import 'widget/start_button.dart';
 
 class CreatingAccountScreen extends StatefulWidget {
@@ -39,6 +35,7 @@ class CreatingAccountScreen extends StatefulWidget {
 }
 
 class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _weightEditingController = TextEditingController();
 
   @override
@@ -54,8 +51,7 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(
-        titleText: '',
-        centerTitle: true,
+        titleText: widget.phone.isEmpty ? 'Forma ma`lumotlari' : '',
         backButtonEnabled: widget.phone.isEmpty,
       ),
       body: BlocListener<CreateAccountBloc, CreateAccountState>(
@@ -76,74 +72,26 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                children: <Widget>[
-                  Image.asset(
-                    ImagesConstants.appLogo,
-                    fit: BoxFit.cover,
-                    width: 1.screenWidth(context),
-                    height: 200,
-                  ),
-                  if (widget.phone.isNotEmpty)
-                    TextView(
-                      text: 'Xush kelibsiz!',
-                      textSize: 32.textSize(context),
-                      textColor: context.themeColors.onSurface,
+            Expanded(
+              child: SingleChildScrollView(
+                padding: getAuthPadding,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    AccountCard(
+                      weightEditingController: _weightEditingController,
+                      isUpdatingAccount: widget.phone.isEmpty,
+                      formKey: _formKey,
                     ),
-                  getHeightSize10,
-                  Container(
-                    width: 1.screenWidth(context),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 0.08.screenWidth(context),
-                      vertical: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: context.themeColors.secondary,
-                      borderRadius: getBorderAll20,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        TextView(
-                          text: widget.phone.isEmpty
-                              ? 'Farzandingiz ma`lumotlarini yangilash'
-                              : "Ro`yxatdan o`tishni yakunlash uchun\nFarzandingiz ma'lumotlarini kiriting",
-                          textSize: 16.textSize(context),
-                          textColor: context.themeColors.onSecondary,
-                          fontWeight: FontWeight.w500,
-                          textAlign: TextAlign.center,
-                        ),
-                        getHeightSize20,
-                        const ChangeBirthDate(),
-                        getHeightSize20,
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            const GenderPopUp(),
-                            const Spacer(),
-                            getWidthSize4,
-                            WeightInput(controller: _weightEditingController),
-                            getWidthSize6,
-                            TextView.boldStyle(
-                              text: 'KG',
-                              textColor: context.themeColors.onSurface,
-                              textSize: 16.textSize(context),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                    getHeightSize20,
+                    if (widget.phone.isEmpty)
+                      Image.asset(ImagesConstants.updateAccImg, fit: BoxFit.cover),
+                  ],
+                ),
               ),
             ),
-            const Spacer(),
             StartButton(phone: widget.phone, pass: widget.password),
-            getHeightSize8,
           ],
         ),
       ),
@@ -151,8 +99,17 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
   }
 
   void _listenController() {
+    const String suffixText = ' kg';
     _weightEditingController.addListener(() {
-      String value = _weightEditingController.text;
+      final String value = _weightEditingController.text;
+      if (value.isNotEmpty) {
+        final int cursorPosition = _weightEditingController.selection.baseOffset;
+        if (cursorPosition > value.length - suffixText.length) {
+          _weightEditingController.selection = TextSelection.fromPosition(TextPosition(
+            offset: value.length - suffixText.length,
+          ));
+        }
+      }
       context.read<CreateAccountBloc>().add(OnInputWeightCreateAccEvent(value));
     });
   }
@@ -163,3 +120,64 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
     super.dispose();
   }
 }
+
+// Column(
+// children: <Widget>[
+// Image.asset(
+// ImagesConstants.appLogo,
+// fit: BoxFit.cover,
+// width: 1.screenWidth(context),
+// height: 200,
+// ),
+// if (widget.phone.isNotEmpty)
+// TextView(
+// text: 'Xush kelibsiz!',
+// textSize: 32.textSize(context),
+// textColor: context.themeColors.onSurface,
+// ),
+// getHeightSize10,
+// Container(
+// width: 1.screenWidth(context),
+// padding: EdgeInsets.symmetric(
+// horizontal: 0.08.screenWidth(context),
+// vertical: 16,
+// ),
+// decoration: BoxDecoration(
+// color: context.themeColors.secondary,
+// borderRadius: getBorderAll20,
+// ),
+// child: Column(
+// mainAxisAlignment: MainAxisAlignment.center,
+// children: <Widget>[
+// TextView(
+// text: widget.phone.isEmpty
+// ? 'Farzandingiz ma`lumotlarini yangilash'
+//     : "Ro`yxatdan o`tishni yakunlash uchun\nFarzandingiz ma'lumotlarini kiriting",
+// textSize: 16.textSize(context),
+// textColor: context.themeColors.onSecondary,
+// fontWeight: FontWeight.w500,
+// textAlign: TextAlign.center,
+// ),
+// getHeightSize20,
+// const ChangeBirthDateButton(),
+// getHeightSize20,
+// Row(
+// mainAxisSize: MainAxisSize.max,
+// children: <Widget>[
+// const GenderPopUp(),
+// const Spacer(),
+// getWidthSize4,
+// WeightInput(controller: _weightEditingController),
+// getWidthSize6,
+// TextView.boldStyle(
+// text: 'KG',
+// textColor: context.themeColors.onSurface,
+// textSize: 16.textSize(context),
+// ),
+// ],
+// ),
+// ],
+// ),
+// ),
+// ],
+// ),

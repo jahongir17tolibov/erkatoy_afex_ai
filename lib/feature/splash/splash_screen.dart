@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/hive_constants.dart';
 import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
@@ -31,39 +33,28 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-          // BlocListener<ConnectivityCubit, ConnectivityState>(
-          //   listener: (context, state) {
-          //     printOnDebug(state.isDialogShows);
-          //     if (state.isDialogShows != null) {
-          //       state.isDialogShows! ? context.showConnectivityDialog() : Navigator.pop(context);
-          //     }
-          //   },
-          //   child:
-          Padding(
-        padding: getPaddingAll20,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            getFullWidth(context),
-            Image.asset(ImagesConstants.appLogo, width: 500, height: 500, fit: BoxFit.cover),
-            SizedBox(
-              width: 0.5.screenWidth(context),
-              child: LinearProgressIndicator(
-                color: context.themeColors.primary,
-                borderRadius: BorderRadius.circular(10),
-              ),
+      body: Stack(
+        children: <Widget>[
+          Image.asset(
+            ImagesConstants.splashBckg,
+            width: 1.screenWidth(context),
+            height: 1.screenHeight(context),
+            fit: BoxFit.fill,
+          ),
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: Image.asset(ImagesConstants.appLogoOnSplash, fit: BoxFit.cover),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      // ),
     );
   }
 
   void _initSplash() async {
     CustomNativeSplash.remove();
+
     await Future.delayed(const Duration(seconds: 2), () async {
       await getOnBoardingKey().then((value) async {
         value

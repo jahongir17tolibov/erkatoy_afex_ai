@@ -10,6 +10,7 @@ class CreateAccountState extends Equatable {
     this.onLoading,
     this.message = '',
     this.weight = '',
+    this.isValid = false,
   });
 
   final CreateAccountStatus status;
@@ -18,6 +19,7 @@ class CreateAccountState extends Equatable {
   final bool? onLoading;
   final String message;
   final String weight;
+  final bool isValid;
 
   CreateAccountState copyWith({
     CreateAccountStatus? status,
@@ -26,6 +28,7 @@ class CreateAccountState extends Equatable {
     bool? onLoading,
     String? message,
     String? weight,
+    bool? isValid,
   }) =>
       CreateAccountState(
         status: status ?? this.status,
@@ -34,8 +37,9 @@ class CreateAccountState extends Equatable {
         onLoading: onLoading ?? this.onLoading,
         message: message ?? this.message,
         weight: weight ?? this.weight,
+        isValid: isValid ?? this.isValid,
       );
 
   @override
-  List<Object?> get props => [status, birthdayDate, gender, onLoading, message, weight];
+  List<Object?> get props => [status, birthdayDate, gender, onLoading, message, weight, isValid];
 }

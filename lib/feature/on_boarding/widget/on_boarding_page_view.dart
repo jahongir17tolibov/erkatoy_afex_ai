@@ -19,6 +19,7 @@ class OnBoardingPageView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             itemCount: onBoardingDataList.length,
+            pageSnapping: true,
             onPageChanged: (index) {
               context.read<OnBoardingCubit>().onBoardingPageChanged(index);
             },

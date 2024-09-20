@@ -20,6 +20,25 @@ class ImagesConstants {
   static const String motherAndBabyImg = 'assets/images/png/mother_and_child_img.webp';
   static const String childHealthImg = 'assets/images/png/child_health_img.jpeg';
 
+  // png images
+  static const String updateAccImg = 'assets/images/png/update_account_img.png';
+  static const String splashBckg = 'assets/images/png/splash_bckg.png';
+  static const String appLogoOnSplash = 'assets/images/png/erkatoy_logo_splash.png';
+  static const String appLogoImg = 'assets/images/png/erkatoy_logo_main.png';
+  static const String onBoardingImg1 = 'assets/images/png/on_boarding_first_page.png';
+  static const String onBoardingImg2 = 'assets/images/png/on_boarding_second_page.png';
+  static const String onBoardingImg3 = 'assets/images/png/on_boarding_third_page.png';
+  static const String onBoardingImg4 = 'assets/images/png/on_boarding_fourth_page.png';
+  static const String onBoardingImg5 = 'assets/images/png/on_boarding_fifth_page.png';
+
+  // svg icons, pictures
+  static const String backIconRounded = 'assets/images/svg/arrow_left_super_rounded.svg';
+  static const String callIcon = 'assets/images/svg/call_icon.svg';
+  static const String calendarIcon = 'assets/images/svg/calendar_icon.svg';
+  static const String weightIcon = 'assets/images/svg/weight_icon.svg';
+  static const String calendarColoredIcon = 'assets/images/svg/calendar_colored.svg';
+  static const String healthColoredIcon = 'assets/images/svg/health_colored.svg';
+
   // music controls
   static const String pauseIcon = 'assets/images/png/pause.png';
   static const String playIcon = 'assets/images/png/play.png';

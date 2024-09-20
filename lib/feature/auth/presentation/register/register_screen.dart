@@ -1,20 +1,14 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/design_system/components/adaptive_loading_view.dart';
-import 'package:erkatoy_afex_ai/design_system/components/single_child_scroll_with_size.dart';
-import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
-import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/creating_account_screen.dart';
-import 'package:erkatoy_afex_ai/feature/auth/presentation/register/widget/already_signed_text_button.dart';
-import 'package:erkatoy_afex_ai/feature/auth/presentation/register/widget/reenter_password_input.dart';
+import 'package:erkatoy_afex_ai/feature/auth/presentation/register/widget/register_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../design_system/components/phone_input.dart';
 import 'bloc/register_bloc.dart';
 import 'widget/register_button.dart';
-import 'widget/register_password_input.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -53,11 +47,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: TextView(text: 'Ro`yxatdan o`tish', textColor: context.themeColors.onSurface),
-      ),
       body: BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state.status == RegisterStatus.onShowMessage) {
@@ -65,8 +54,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           } else if (state.status == RegisterStatus.onSuccessful) {
             CreatingAccountScreen.openReplace(
               context,
-              phone: _phoneEditingController.text,
-              pass: _passwordEditingController.text,
+              phone: state.phoneNumber,
+              pass: state.password,
             );
           }
 
@@ -76,42 +65,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 : AdaptiveLoadingView.hideLoadingDialog(context);
           }
         },
-        child: SingleChildScrollWithSize(
-          statusBarHeight: MediaQuery.of(context).viewPadding.top,
-          padding: EdgeInsets.symmetric(horizontal: 0.1.screenWidth(context)),
-          screenWithAppBar: true,
-          child: Center(
-            child: Form(
-              key: _validateForm,
-              onChanged: _onFormChanged,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  PhoneInput(
-                    focusNode: _phoneFocusNode,
-                    controller: _phoneEditingController,
-                  ),
-                  getHeightSize10,
-                  RegisterPasswordInput(
-                    focusNode: _passwordFocusNode,
-                    controller: _passwordEditingController,
-                    onKeyboardNextBtnPressed: () {
-                      _rePasswordFocusNode.requestFocus();
-                    },
-                  ),
-                  getHeightSize10,
-                  ReEnterPasswordInput(
-                    focusNode: _rePasswordFocusNode,
-                    controller: _rePasswordEditingController,
-                  ),
-                  getHeightSize20,
-                  const RegisterButton(),
-                  getHeightSize8,
-                  const AlreadySignedTextButton(),
-                ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                padding: getAuthPadding,
+                child: RegisterCard(
+                  formKey: _validateForm,
+                  onFormChanged: _onFormChanged,
+                  passwordEditingController: _passwordEditingController,
+                  passwordFocusNode: _passwordFocusNode,
+                  phoneEditingController: _phoneEditingController,
+                  phoneFocusNode: _phoneFocusNode,
+                  rePasswordEditingController: _rePasswordEditingController,
+                  rePasswordFocusNode: _rePasswordFocusNode,
+                ),
               ),
             ),
-          ),
+            const RegisterButton(),
+          ],
         ),
       ),
     );
@@ -129,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void _initControllers() {
     _phoneEditingController.addListener(() {
       String value = _phoneEditingController.text;
-      context.read<RegisterBloc>().add(OnInputPhoneRegisterEvent(value));
+      context.read<RegisterBloc>().add(OnInputPhoneRegisterEvent(value.replaceAll(' ', '')));
     });
     _passwordEditingController.addListener(() {
       String value = _passwordEditingController.text;

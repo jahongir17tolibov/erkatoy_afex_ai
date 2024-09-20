@@ -1,9 +1,8 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
+import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/feature/on_boarding/cubit/on_boarding_cubit.dart';
-import 'package:erkatoy_afex_ai/feature/on_boarding/widget/on_boarding_next_button.dart';
+import 'package:erkatoy_afex_ai/feature/on_boarding/widget/on_boarding_bottom_view.dart';
 import 'package:erkatoy_afex_ai/feature/on_boarding/widget/on_boarding_page_view.dart';
-import 'package:erkatoy_afex_ai/feature/on_boarding/widget/on_boarding_skip_button.dart';
-import 'package:erkatoy_afex_ai/feature/on_boarding/widget/page_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -36,29 +35,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       body: SafeArea(
         child: Padding(
           padding: getPaddingAll10,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                OnBoardingPageView(controller: _pageController),
-                getHeightSize10,
-                const PageIndicator(),
-                getHeightSize20,
-                OnBoardingNextButton(
-                  onPressed: () {
-                    _pageController.nextPage(
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeIn,
-                    );
-                  },
-                ),
-                getHeightSize10,
-                const OnBoardingSkipButton(),
-                getHeightSize10,
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              getHeightSizeCustom(30),
+              Image.asset(ImagesConstants.appLogoImg, fit: BoxFit.cover),
+              OnBoardingPageView(controller: _pageController),
+              getHeightSizeCustom(40),
+            ],
           ),
         ),
+      ),
+      bottomNavigationBar: OnBoardingBottomView(
+        onNextButtonPressed: () {
+          _pageController.nextPage(
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeIn,
+          );
+        },
       ),
     );
   }

@@ -14,21 +14,32 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   void initOnBoarding() {
     final listOfItems = <OnBoardingModel>[
       OnBoardingModel(
-        image: ImagesConstants.motherAndBabyImg,
-        title: 'Parvarish',
+        image: ImagesConstants.onBoardingImg1,
+        title: 'Xush Kelibsiz',
         subtitle: 'Yangi tug`ilgan chaqaloqni to`g`ri parvarishlash haqida maslahatlar',
       ),
       OnBoardingModel(
-        image: ImagesConstants.childHealthImg,
-        title: 'Salomatlik',
-        subtitle:
-            'Chaqaloq salomatligini yaxshilash uchun foydali maslahatlar, kasalliklar haqida ma`lumotlar va kunlik jadval',
-      ),
-      OnBoardingModel(
-        image: ImagesConstants.aiBotImg,
+        image: ImagesConstants.onBoardingImg2,
         title: 'AI chatbot',
         subtitle:
-            'Nafaqat chaqaloqlar balki odam salomatligi haqida barcha savollarga javob beradigan tezkor suniy intellekt chatboti',
+        'Chaqaloq salomatligini yaxshilash uchun foydali maslahatlar, kasalliklar haqida ma`lumotlar va kunlik jadval',
+      ),
+      OnBoardingModel(
+        image: ImagesConstants.onBoardingImg3,
+        title: 'Parvarish',
+        subtitle:
+        'Nafaqat chaqaloqlar balki odam salomatligi haqida barcha savollarga javob beradigan tezkor suniy intellekt chatboti',
+      ),
+      OnBoardingModel(
+        image: ImagesConstants.onBoardingImg4,
+        title: 'Salomatlik',
+        subtitle:
+        'Nafaqat chaqaloqlar balki odam salomatligi haqida barcha savollarga javob beradigan tezkor suniy intellekt chatboti',
+      ),
+      OnBoardingModel(
+        image: ImagesConstants.onBoardingImg5,
+        title: '',
+        subtitle: 'Nafaqat chaqaloqlar balki odam salomatligi haqida barcha savollarga javob beradigan tezkor suniy intellekt chatboti',
       ),
     ];
     emit(state.copyWith(onBoardingDataList: listOfItems));

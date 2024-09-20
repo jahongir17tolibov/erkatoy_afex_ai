@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/provider/remote/api_client.dart';
 import 'package:erkatoy_afex_ai/core/provider/remote/dio_exception_handler.dart';
 import 'package:erkatoy_afex_ai/feature/auth/data/remote/dto/auth_response.dart';
@@ -24,7 +25,10 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
           'phone': phone,
           'password': password,
         },
-      ).then((response) => AuthResponse.fromJson(response.data));
+      ).then((response) {
+        printOnDebug('msg: ${response.data}');
+        return AuthResponse.fromJson(response.data);
+      });
     } on DioException catch (e) {
       final exception = DioExceptionHandler.fromDioError(e);
       authResponse = AuthResponse(detail: exception.errorMessage);

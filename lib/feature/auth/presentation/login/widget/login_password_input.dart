@@ -37,9 +37,15 @@ class LoginPasswordInput extends StatelessWidget {
               obscureText: obscureState,
               focusNode: focusNode,
               inputActionIsNext: false,
-              onPressSuffixBtn: () {
-                context.read<LoginBloc>().add(OnObscurePressedLoginEvent());
-              },
+              suffixIcon: IconButton(
+                onPressed: () {
+                  context.read<LoginBloc>().add(OnObscurePressedLoginEvent());
+                },
+                icon: Icon(
+                  !obscureState ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey.withOpacity(0.5),
+                ),
+              ),
               validator: (value) {
                 if (value!.length < 8) return 'Parolning uzunligi 8 tadan kam bo`lmasligi kerak!';
                 return null;

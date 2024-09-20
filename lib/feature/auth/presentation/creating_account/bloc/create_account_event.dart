@@ -30,3 +30,9 @@ final class OnStartButtonPressedCreateAccEvent extends CreateAccountEvent {
 }
 
 final class OnUpdateChildInfoCreateAccEvent extends CreateAccountEvent {}
+
+final class OnValidateFormCreateAccountEvent extends CreateAccountEvent {
+  OnValidateFormCreateAccountEvent(this.isValid);
+
+  final bool isValid;
+}

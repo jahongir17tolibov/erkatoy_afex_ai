@@ -13,13 +13,13 @@ class OnBoardingNextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnBoardingCubit, OnBoardingState, int>(
-      selector: (state) => state.pageIndex,
-      builder: (context, index) {
+    return BlocSelector<OnBoardingCubit, OnBoardingState, bool>(
+      selector: (state) => state.pageIndex == (state.onBoardingDataList.length - 1),
+      builder: (context, isLastItem) {
         return ScaleOnPress(
           child: ErkatoyButton(
             onPressed: () async {
-              index == 2
+              isLastItem
                   ? await context
                       .read<OnBoardingCubit>()
                       .onBoardingCompleted()
@@ -27,7 +27,7 @@ class OnBoardingNextButton extends StatelessWidget {
                   : onPressed.call();
             },
             buttonHeight: 48,
-            text: 'Davom etish',
+            text: isLastItem ? 'Qani boshladik unda' : 'Davom etish',
             buttonColor: context.themeColors.primary,
             textColor: context.themeColors.onPrimary,
             borderRadius: 12,

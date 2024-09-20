@@ -26,4 +26,6 @@ class AppColors {
         surface: Color(0xFF1C201B),
         onSurface: Color(0xFFD0D5CE),
       );
+
+  static const Color greyForLines = Color(0xFF8C8A8A);
 }

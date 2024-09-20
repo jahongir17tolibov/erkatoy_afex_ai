@@ -21,6 +21,10 @@ SizedBox get getWidthSize16 => const SizedBox(width: 16);
 SizedBox get getHeightSize16 => const SizedBox(height: 16);
 SizedBox get getWidthSize20 => const SizedBox(width: 20);
 SizedBox get getHeightSize20 => const SizedBox(height: 20);
+SizedBox get getWidthSize32 => const SizedBox(width: 32);
+SizedBox get getHeightSize32 => const SizedBox(height: 32);
+SizedBox getHeightSizeCustom(double size) => SizedBox(height: size);
+SizedBox getWidthSizeCustom(double size) => SizedBox(width: size);
 SizedBox getFullHeight(BuildContext context) => SizedBox(height: 1.screenHeight(context));
 SizedBox getFullWidth(BuildContext context) => SizedBox(width: 1.screenWidth(context));
 
@@ -32,6 +36,7 @@ EdgeInsets get getPaddingAll10 => const EdgeInsets.all(10);
 EdgeInsets get getPaddingAll12 => const EdgeInsets.all(12);
 EdgeInsets get getPaddingAll16 => const EdgeInsets.all(16);
 EdgeInsets get getPaddingAll20 => const EdgeInsets.all(20);
+EdgeInsets get getAuthPadding => const EdgeInsets.fromLTRB(20, 80, 20, 20);
 // EdgeInsets get symmetric => const EdgeInsets.symmetric(horizontal: );
 
 /// borders

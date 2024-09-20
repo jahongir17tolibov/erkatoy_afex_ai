@@ -16,8 +16,10 @@ class ErkatoyButton extends StatelessWidget {
     this.textToLeft = false,
     this.boldStyledTextEnabled = false,
     this.elevation,
+    this.borderSideWidth,
   })  : isOutlined = false,
-        borderSideColor = null;
+        borderSideColor = null,
+        icon = null;
 
   const ErkatoyButton.outlined({
     super.key,
@@ -32,8 +34,28 @@ class ErkatoyButton extends StatelessWidget {
     this.textToLeft = false,
     this.boldStyledTextEnabled = false,
     this.elevation,
+    this.borderSideWidth,
   })  : isOutlined = true,
-        buttonColor = null;
+        buttonColor = null,
+        icon = null;
+
+  const ErkatoyButton.withIcon({
+    super.key,
+    this.buttonWidth,
+    this.buttonHeight,
+    required this.onPressed,
+    required this.text,
+    this.textColor,
+    this.textSize,
+    this.borderRadius = 12,
+    this.borderSideColor,
+    this.boldStyledTextEnabled = false,
+    this.elevation,
+    this.isOutlined = false,
+    this.buttonColor,
+    required this.icon,
+    this.borderSideWidth,
+  }) : textToLeft = false;
 
   final VoidCallback? onPressed;
   final double? buttonWidth;
@@ -48,6 +70,8 @@ class ErkatoyButton extends StatelessWidget {
   final bool textToLeft;
   final bool boldStyledTextEnabled;
   final double? elevation;
+  final Widget? icon;
+  final double? borderSideWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -64,17 +88,32 @@ class ErkatoyButton extends StatelessWidget {
       color: isOutlined ? context.themeColors.surface : buttonColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
-        side: isOutlined ? BorderSide(color: borderSideColor ?? Colors.grey) : BorderSide.none,
+        side: isOutlined
+            ? BorderSide(color: borderSideColor ?? Colors.grey, width: borderSideWidth ?? 1.0)
+            : BorderSide.none,
       ),
-      child: Align(
-        alignment: textToLeft ? Alignment.centerLeft : Alignment.center,
-        child: TextView(
-          text: text,
-          textColor: textColor,
-          textSize: textSize,
-          fontWeight: boldStyledTextEnabled ? FontWeight.bold : null,
-        ),
-      ),
+      child: icon == null
+          ? Align(
+              alignment: textToLeft ? Alignment.centerLeft : Alignment.center,
+              child: TextView(
+                text: text,
+                textColor: textColor,
+                textSize: textSize,
+                fontWeight: boldStyledTextEnabled ? FontWeight.bold : null,
+              ),
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                TextView(
+                  text: text,
+                  textColor: textColor,
+                  textSize: textSize,
+                  fontWeight: boldStyledTextEnabled ? FontWeight.bold : null,
+                ),
+                icon!,
+              ],
+            ),
     );
   }
 }

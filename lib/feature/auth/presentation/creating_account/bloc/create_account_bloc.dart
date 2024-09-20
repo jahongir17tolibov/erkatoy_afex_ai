@@ -8,7 +8,6 @@ import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/login_use_case.dart
 import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/send_child_info_use_case.dart';
 
 part 'create_account_event.dart';
-
 part 'create_account_state.dart';
 
 class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
@@ -23,6 +22,7 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
     on<OnInputWeightCreateAccEvent>(_onInputWeightCreateAccEvent);
     on<OnStartButtonPressedCreateAccEvent>(_onStartButtonPressedCreateAccEvent);
     on<OnUpdateChildInfoCreateAccEvent>(_onUpdateChildInfoCreateAccEvent);
+    on<OnValidateFormCreateAccountEvent>(_onValidateFormCreateAccountEvent);
   }
 
   final LoginUseCase loginUseCase;
@@ -42,9 +42,12 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
         ));
       } else {
         emit(state.copyWith(
-            status: CreateAccountStatus.onShowMessage, message: result.errorMessage));
+          status: CreateAccountStatus.onShowMessage,
+          message: result.errorMessage,
+        ));
       }
     });
+    emit(state.copyWith(status: CreateAccountStatus.pure));
   }
 
   FutureOr<void> _onChangeBirthDayDateEvent(
@@ -77,7 +80,7 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
 
       final login = await _loginPhoneNumber(emit, phone: event.phone, pass: event.pass);
       if (login != null) {
-        await Future.delayed(const Duration(seconds: 3), () async {
+        await Future.delayed(const Duration(seconds: 1), () async {
           await _sendChildInfo(emit);
         });
       }
@@ -119,10 +122,9 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
         .execute(
       birthDayDate: normalDateTimeFormat(state.birthdayDate!),
       gender: _formatGenderText(),
-      weight: double.parse(state.weight),
+      weight: double.parse(state.weight.replaceAll(' kg', '')),
     )
         .then((result) async {
-      printOnDebug('_sendChildInfo: $result');
       if (result.errorMessage == null) {
         emit(state.copyWith(
           status: CreateAccountStatus.onShowMessage,
@@ -142,16 +144,22 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
           message: result.errorMessage!,
           onLoading: false,
         ));
-        printOnDebug('on else: ${state.status}');
       }
     });
   }
 
   String _formatGenderText() {
-    return state.gender! == 'O`g`il' ? 'boy' : 'girl';
+    return state.gender! == 'O`g`il bola' ? 'boy' : 'girl';
   }
 
   String _deFormatGenderText(String gender) {
-    return gender == 'boy' ? 'O`g`il' : 'Qiz';
+    return gender == 'boy' ? 'O`g`il bola' : 'Qiz bola';
+  }
+
+  FutureOr<void> _onValidateFormCreateAccountEvent(
+    OnValidateFormCreateAccountEvent event,
+    Emitter<CreateAccountState> emit,
+  ) {
+    emit(state.copyWith(isValid: event.isValid));
   }
 }

@@ -13,14 +13,12 @@ void main() async {
   final WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   CustomNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await configureDependencies();
   await HiveDatabase.init();
 
-  await PermissionService.audio(() {});
+  await PermissionService.audio();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

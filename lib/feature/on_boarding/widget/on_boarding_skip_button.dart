@@ -10,12 +10,12 @@ class OnBoardingSkipButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<OnBoardingCubit, OnBoardingState, int>(
-      selector: (state) => state.pageIndex,
-      builder: (context, index) {
+    return BlocSelector<OnBoardingCubit, OnBoardingState, bool>(
+      selector: (state) => state.pageIndex == (state.onBoardingDataList.length - 1),
+      builder: (context, isLastItem) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 250),
-          height: index == 2 ? 0 : 48,
+          height: isLastItem ? 0 : 48,
           child: ErkatoyButton.outlined(
             onPressed: () async {
               await context.read<OnBoardingCubit>().onBoardingCompleted().whenComplete(() {

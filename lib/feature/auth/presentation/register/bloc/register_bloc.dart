@@ -6,7 +6,6 @@ import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/feature/auth/domain/use_case/register_use_case.dart';
 
 part 'register_event.dart';
-
 part 'register_state.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
@@ -40,7 +39,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     OnRegisterBtnPressedEvent event,
     Emitter<RegisterState> emit,
   ) async {
-    if (state.status != RegisterStatus.onShowMessage) {
+    // if (state.status != RegisterStatus.onShowMessage) {
       emit(state.copyWith(onLoading: true));
       await registerUseCase
           .execute(phone: state.phoneNumber, password: state.password)
@@ -63,8 +62,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           ));
         }
       });
-      emit(state.copyWith(onLoading: null));
-    }
+      emit(state.copyWith(status: RegisterStatus.pure, onLoading: null));
+    // }
   }
 
   FutureOr<void> _onInputPhoneRegisterEvent(

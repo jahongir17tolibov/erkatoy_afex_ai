@@ -32,16 +32,22 @@ class RegisterPasswordInput extends StatelessWidget {
               textSize: 12.textSize(context),
               textColor: context.themeColors.onSurface,
             ),
-            getHeightSize4,
+            getHeightSize6,
             ErkatoyTextField.passwordMode(
               hintText: 'Parolni kiriting',
               controller: controller,
               obscureText: obscureState,
               focusNode: focusNode,
               onEditingComplete: onKeyboardNextBtnPressed,
-              onPressSuffixBtn: () {
-                context.read<RegisterBloc>().add(OnObscurePressedRegisterEvent());
-              },
+              suffixIcon: IconButton(
+                onPressed: () {
+                  context.read<RegisterBloc>().add(OnObscurePressedRegisterEvent());
+                },
+                icon: Icon(
+                  !obscureState ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.grey.withOpacity(0.5),
+                ),
+              ),
               validator: (value) {
                 if (value!.length < 8) return 'Parolning uzunligi 8 tadan kam bo`lmasligi kerak!';
                 return null;

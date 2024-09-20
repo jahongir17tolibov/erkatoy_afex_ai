@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   const DefaultAppBar({
     super.key,
-    required this.titleText,
+    this.titleText = '',
     this.centerTitle = true,
     this.backButtonEnabled = false,
   });
@@ -24,6 +24,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: TextView(
         text: titleText,
         textColor: context.themeColors.onSurface,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

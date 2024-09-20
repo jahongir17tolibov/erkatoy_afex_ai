@@ -1,5 +1,6 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
+import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/creating_account/creating_account_screen.dart';
 import 'package:erkatoy_afex_ai/feature/auth/presentation/register/register_screen.dart';
@@ -67,6 +68,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               getHeightSize10,
               const LogoutButton(),
+              getHeightSize20,
+              const TextView(text: 'Ilova versiyasi 1.0.2', textColor: Colors.grey),
               const Spacer(),
             ],
           ),
