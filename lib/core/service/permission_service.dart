@@ -15,8 +15,8 @@ class PermissionService {
   }
 
   static Future<void> audio({VoidCallback? granted}) async {
-    final audioPerm = await Permission.audio.isGranted;
-    if (!audioPerm) {
+    final audioPerm = await Permission.audio.request();
+    if (audioPerm.isDenied) {
       await Permission.audio.request();
     } else {
       granted?.call();

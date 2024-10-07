@@ -1,4 +1,5 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
+import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/adaptive_loading_view.dart';
 import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/floating_ui.dart';
@@ -8,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/images_constants.dart';
 import 'bloc/create_account_bloc.dart';
 import 'widget/start_button.dart';
 
@@ -37,6 +37,7 @@ class CreatingAccountScreen extends StatefulWidget {
 class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _weightEditingController = TextEditingController();
+  final String suffixText = ' kg';
 
   @override
   void initState() {
@@ -57,17 +58,21 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
       body: BlocListener<CreateAccountBloc, CreateAccountState>(
         listener: (context, state) {
           if (state.status == CreateAccountStatus.onShowMessage) {
-            context.showSnackBar(state.message);
+            context.showToast(state.message);
           } else if (state.status == CreateAccountStatus.onSuccessfulCreated) {
             HomeScreen.open(context);
           } else if (state.status == CreateAccountStatus.onSuccessfulUpdated) {
             context.pop();
           }
 
-          if (state.onLoading != null) {
-            state.onLoading!
-                ? AdaptiveLoadingView.showLoadingDialog(context)
-                : AdaptiveLoadingView.hideLoadingDialog(context);
+          if (state.status == CreateAccountStatus.onShowDialog) {
+            AdaptiveLoadingView.showLoadingDialog(context);
+          } else if (state.status == CreateAccountStatus.onHideDialog) {
+            AdaptiveLoadingView.hideLoadingDialog(context);
+          }
+
+          if (widget.phone.isEmpty) {
+            _onSetWeight(state.weight);
           }
         },
         child: Column(
@@ -99,19 +104,29 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
   }
 
   void _listenController() {
-    const String suffixText = ' kg';
     _weightEditingController.addListener(() {
       final String value = _weightEditingController.text;
-      if (value.isNotEmpty) {
-        final int cursorPosition = _weightEditingController.selection.baseOffset;
-        if (cursorPosition > value.length - suffixText.length) {
-          _weightEditingController.selection = TextSelection.fromPosition(TextPosition(
-            offset: value.length - suffixText.length,
-          ));
-        }
-      }
+      _formatWeight(value);
       context.read<CreateAccountBloc>().add(OnInputWeightCreateAccEvent(value));
     });
+  }
+
+  void _formatWeight(String value) {
+    if (value.isNotEmpty) {
+      final int cursorPosition = _weightEditingController.selection.baseOffset;
+      if (cursorPosition > value.length - suffixText.length) {
+        _weightEditingController.selection = TextSelection.fromPosition(TextPosition(
+          offset: value.length - suffixText.length,
+        ));
+      }
+    }
+  }
+
+  void _onSetWeight(String value) {
+    if (!value.endsWith(suffixText) && value.isNotEmpty) {
+      _weightEditingController.text = '$value$suffixText';
+      _formatWeight(value);
+    }
   }
 
   @override
@@ -120,64 +135,3 @@ class _CreatingAccountScreenState extends State<CreatingAccountScreen> {
     super.dispose();
   }
 }
-
-// Column(
-// children: <Widget>[
-// Image.asset(
-// ImagesConstants.appLogo,
-// fit: BoxFit.cover,
-// width: 1.screenWidth(context),
-// height: 200,
-// ),
-// if (widget.phone.isNotEmpty)
-// TextView(
-// text: 'Xush kelibsiz!',
-// textSize: 32.textSize(context),
-// textColor: context.themeColors.onSurface,
-// ),
-// getHeightSize10,
-// Container(
-// width: 1.screenWidth(context),
-// padding: EdgeInsets.symmetric(
-// horizontal: 0.08.screenWidth(context),
-// vertical: 16,
-// ),
-// decoration: BoxDecoration(
-// color: context.themeColors.secondary,
-// borderRadius: getBorderAll20,
-// ),
-// child: Column(
-// mainAxisAlignment: MainAxisAlignment.center,
-// children: <Widget>[
-// TextView(
-// text: widget.phone.isEmpty
-// ? 'Farzandingiz ma`lumotlarini yangilash'
-//     : "Ro`yxatdan o`tishni yakunlash uchun\nFarzandingiz ma'lumotlarini kiriting",
-// textSize: 16.textSize(context),
-// textColor: context.themeColors.onSecondary,
-// fontWeight: FontWeight.w500,
-// textAlign: TextAlign.center,
-// ),
-// getHeightSize20,
-// const ChangeBirthDateButton(),
-// getHeightSize20,
-// Row(
-// mainAxisSize: MainAxisSize.max,
-// children: <Widget>[
-// const GenderPopUp(),
-// const Spacer(),
-// getWidthSize4,
-// WeightInput(controller: _weightEditingController),
-// getWidthSize6,
-// TextView.boldStyle(
-// text: 'KG',
-// textColor: context.themeColors.onSurface,
-// textSize: 16.textSize(context),
-// ),
-// ],
-// ),
-// ],
-// ),
-// ),
-// ],
-// ),

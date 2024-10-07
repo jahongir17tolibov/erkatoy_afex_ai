@@ -8,6 +8,8 @@ extension StringExtensions on String {
     return regex.hasMatch(this);
   }
 
+  String get capitalize => isNotEmpty ? '${this[0].toUpperCase()}${substring(1)}' : '';
+
   TextSpan get parseMarkdown {
     List<TextSpan> children = [];
 

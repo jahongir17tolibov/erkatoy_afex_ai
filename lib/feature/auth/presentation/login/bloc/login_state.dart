@@ -1,6 +1,6 @@
 part of 'login_bloc.dart';
 
-enum LoginStatus { pure, onSuccessful, onShowMessage }
+enum LoginStatus { pure, onSuccessful, onShowMessage, onShowDialog, onHideDialog }
 
 class LoginState extends Equatable {
   const LoginState({
@@ -10,7 +10,6 @@ class LoginState extends Equatable {
     this.isValid = false,
     this.obscureState = true,
     this.message,
-    this.onLoading,
   });
 
   final LoginStatus status;
@@ -19,7 +18,6 @@ class LoginState extends Equatable {
   final bool isValid;
   final bool obscureState;
   final String? message;
-  final bool? onLoading;
 
   LoginState copyWith({
     LoginStatus? status,
@@ -28,7 +26,6 @@ class LoginState extends Equatable {
     bool? isValid,
     bool? obscureState,
     String? message,
-    bool? onLoading,
   }) =>
       LoginState(
         status: status ?? this.status,
@@ -37,10 +34,8 @@ class LoginState extends Equatable {
         isValid: isValid ?? this.isValid,
         obscureState: obscureState ?? this.obscureState,
         message: message ?? this.message,
-        onLoading: onLoading ?? this.onLoading,
       );
 
   @override
-  List<Object?> get props =>
-      [status, phoneNumber, password, isValid, obscureState, message, onLoading];
+  List<Object?> get props => [status, phoneNumber, password, isValid, obscureState, message];
 }

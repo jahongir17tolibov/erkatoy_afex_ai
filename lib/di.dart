@@ -13,6 +13,7 @@ import 'package:erkatoy_afex_ai/feature/home/data/local/home_local_source.dart';
 import 'package:erkatoy_afex_ai/feature/home/data/remote/source/home_remote_source_impl.dart';
 import 'package:erkatoy_afex_ai/feature/home/data/repository/home_repository_impl.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/repository/home_repository.dart';
+import 'package:erkatoy_afex_ai/feature/home/domain/use_case/clear_chat_history_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/get_all_activities_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/get_cached_chats_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/get_current_activity_use_case.dart';
@@ -20,6 +21,7 @@ import 'package:erkatoy_afex_ai/feature/home/domain/use_case/get_health_tips_use
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/request_to_ai_chat_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/save_chat_to_db_use_case.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/bloc/chat_bloc.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/cry_record/bloc/cry_record_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/bloc/daily_schedule_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/health/bloc/health_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.dart';
@@ -92,6 +94,8 @@ Future<void> configureDependencies() async {
         () => RequestToAiChatUseCase(repository: getIt<HomeRepository>()))
     ..registerFactory<GetCryReasonWithAudioUseCase>(
         () => GetCryReasonWithAudioUseCase(repository: getIt<HomeRepository>()))
+    ..registerFactory<ClearChatHistoryUseCase>(
+        () => ClearChatHistoryUseCase(repository: getIt<HomeRepository>()))
     //
     ..registerFactory<HomeBloc>(() => HomeBloc(
           getCurrentActivityUseCase: getIt<GetCurrentActivityUseCase>(),
@@ -107,7 +111,12 @@ Future<void> configureDependencies() async {
     ..registerFactory<HealthBloc>(
         () => HealthBloc(getHealthTipsUseCase: getIt<GetHealthTipsUseCase>()))
     ..registerFactory<ZenBloc>((ZenBloc.new))
+    ..registerFactory<CryRecordBloc>(
+        () => CryRecordBloc(getCryReasonWithAudioUseCase: getIt<GetCryReasonWithAudioUseCase>()))
 
     /// settings
-    ..registerFactory<SettingsBloc>(() => SettingsBloc(localStorage: getIt<HiveLocalStorage>()));
+    ..registerFactory<SettingsBloc>(() => SettingsBloc(
+          localStorage: getIt<HiveLocalStorage>(),
+          clearChatHistoryUseCase: getIt<ClearChatHistoryUseCase>(),
+        ));
 }

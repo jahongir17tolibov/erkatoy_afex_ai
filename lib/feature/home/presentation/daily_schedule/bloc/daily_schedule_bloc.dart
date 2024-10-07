@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/entity/activity_schedule.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/get_all_activities_use_case.dart';
+import 'package:intl/intl.dart';
 
 part 'daily_schedule_event.dart';
 part 'daily_schedule_state.dart';
@@ -20,15 +21,14 @@ class DailyScheduleBloc extends Bloc<DailyScheduleEvent, DailyScheduleState> {
     Emitter<DailyScheduleState> emit,
   ) async {
     emit(state.copyWith(status: DailyScheduleStatus.onLoading));
-    await getAllActivitiesUseCase.execute().then((result) {
+    final currentTime = DateFormat.Hm().tryParse(event.currentTime) ?? DateTime.now();
+    await getAllActivitiesUseCase.execute(currentTime).then((result) {
       if (result.errorMessage == null) {
-        final scheduleList = result.data!.map((data) {
-          if (data.time == event.currentTime) {
-            return data.copyWith(isCurrent: true);
-          }
-          return data;
-        }).toList();
-        emit(state.copyWith(status: DailyScheduleStatus.onSuccess, schedule: scheduleList));
+        final List<ActivitySchedule> scheduleList = result.data!;
+        emit(state.copyWith(
+          status: DailyScheduleStatus.onSuccess,
+          schedule: scheduleList,
+        ));
       } else {
         emit(state.copyWith(status: DailyScheduleStatus.onError));
       }

@@ -1,6 +1,8 @@
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
+import 'package:erkatoy_afex_ai/design_system/components/blur_outer_container.dart';
 import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/daily_schedule/widget/rotated_arrow.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/health/bloc/health_bloc.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/health/widget/health_rich_text.dart';
 import 'package:flutter/material.dart';
@@ -31,30 +33,48 @@ class HealthListItem extends StatelessWidget {
         context.read<HealthBloc>().add(OnExpandListItemHealthEvent(diseaseText));
       },
       borderRadius: getBorderAll16,
-      child: Padding(
-        padding: getPaddingAll6,
+      child: BlurOuterContainer(
+        padding: getPaddingAll16,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            TextView.boldStyle(
-              text: '$index. $diseaseText',
-              textSize: 18.textSize(context),
-              textColor: context.themeColors.onSecondary,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: TextView.boldStyle(
+                    text: '$index. $diseaseText',
+                    textSize: 16,
+                    textColor: context.themeColors.onSurface,
+                    textOverflow: isExpanded ? null : TextOverflow.ellipsis,
+                    maxLines: isExpanded ? null : 1,
+                  ),
+                ),
+                RotatedArrow(isExpanded: isExpanded),
+              ],
             ),
             ExpandedSection(
+              key: Key(index.toString()),
               isExpanded: isExpanded,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  getHeightSize10,
-                  HealthRichText(leftText: 'Sabab', rightText: causeText),
-                  getHeightSize20,
-                  HealthRichText(leftText: 'Yechim', rightText: solutionText),
-                ],
+              child: Container(
+                margin: const EdgeInsets.only(top: 8),
+                padding: getPaddingAll12,
+                width: 1.screenWidth(context),
+                decoration: BoxDecoration(
+                  color: context.themeColors.onSurface.withOpacity(0.1),
+                  borderRadius: getBorderAll12,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    HealthRichText(leftText: 'Sabab', rightText: causeText),
+                    getHeightSize8,
+                    HealthRichText(leftText: 'Yechim', rightText: solutionText),
+                  ],
+                ),
               ),
             ),
-            getOnSurfaceDivider(context),
           ],
         ),
       ),

@@ -28,4 +28,6 @@ abstract interface class HomeRepository {
 
   @protected
   Future<CryReasonResult> getCryReasonFromApi(String audioUrl);
+
+  Future<int> clearChatHistory();
 }

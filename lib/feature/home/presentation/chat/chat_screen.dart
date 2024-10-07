@@ -1,7 +1,7 @@
-import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_app_bar.dart';
+import 'package:erkatoy_afex_ai/design_system/components/default_app_bar.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_input.dart';
 import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_list_view.dart';
-import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_loading.dart';
+import 'package:erkatoy_afex_ai/feature/home/presentation/chat/widget/chat_on_empty_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -11,6 +11,8 @@ import 'bloc/chat_bloc.dart';
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
 
+  static const String routePath = '/chat';
+  static const String routeBottom = '/chat_bn';
   static const String routeName = 'chat';
 
   static void open(BuildContext context) {
@@ -34,12 +36,11 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const ChatAppBar(),
+      appBar: const DefaultAppBar(titleText: 'Yordamchi AI', backButtonEnabled: true),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           const ChatListView(),
-          const ChatLoading(),
+          const ChatOnEmptyText(),
           ChatInput(controller: _chatEditingController, focusNode: _chatFocusNode),
         ],
       ),

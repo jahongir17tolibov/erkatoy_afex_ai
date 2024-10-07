@@ -48,6 +48,7 @@ BorderRadius get getBorderAll16 => BorderRadius.circular(16);
 BorderRadius get getBorderAll20 => BorderRadius.circular(20);
 BorderRadius getFullBorder(BuildContext context) => BorderRadius.circular(1.screenWidth(context));
 BorderRadius getCustomBorder(double radius) => BorderRadius.circular(radius);
+Radius getCircularRadius(double value) => Radius.circular(value);
 
 /// dividers
 Widget get getDivider => const Divider(color: Colors.grey);

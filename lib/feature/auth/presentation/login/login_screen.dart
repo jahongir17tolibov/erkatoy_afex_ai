@@ -48,15 +48,15 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state.status == LoginStatus.onShowMessage) {
-            context.showSnackBar(state.message!);
+            context.showToast(state.message!);
           } else if (state.status == LoginStatus.onSuccessful) {
             HomeScreen.open(context);
           }
 
-          if (state.onLoading != null) {
-            state.onLoading!
-                ? AdaptiveLoadingView.showLoadingDialog(context)
-                : AdaptiveLoadingView.hideLoadingDialog(context);
+          if (state.status == LoginStatus.onShowDialog) {
+            AdaptiveLoadingView.showLoadingDialog(context);
+          } else if (state.status == LoginStatus.onHideDialog) {
+            AdaptiveLoadingView.hideLoadingDialog(context);
           }
         },
         child: Column(

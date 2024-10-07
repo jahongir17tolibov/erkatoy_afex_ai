@@ -1,4 +1,3 @@
-import 'package:erkatoy_afex_ai/core/service/permission_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,8 +16,7 @@ void main() async {
 
   await configureDependencies();
   await HiveDatabase.init();
-
-  await PermissionService.audio();
+  // await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

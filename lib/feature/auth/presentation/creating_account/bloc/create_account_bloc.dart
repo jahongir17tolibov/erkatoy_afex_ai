@@ -75,16 +75,13 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
     OnStartButtonPressedCreateAccEvent event,
     Emitter<CreateAccountState> emit,
   ) async {
-    if (state.status != CreateAccountStatus.onShowMessage) {
-      emit(state.copyWith(onLoading: true));
+    emit(state.copyWith(status: CreateAccountStatus.onShowDialog));
 
-      final login = await _loginPhoneNumber(emit, phone: event.phone, pass: event.pass);
-      if (login != null) {
-        await Future.delayed(const Duration(seconds: 1), () async {
-          await _sendChildInfo(emit);
-        });
-      }
-      emit(state.copyWith(onLoading: null));
+    final login = await _loginPhoneNumber(emit, phone: event.phone, pass: event.pass);
+    if (login != null) {
+      await Future.delayed(const Duration(seconds: 1), () async {
+        await _sendChildInfo(emit);
+      });
     }
   }
 
@@ -100,7 +97,6 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
       emit(state.copyWith(
         status: CreateAccountStatus.onShowMessage,
         message: result.errorMessage!,
-        onLoading: false,
       ));
       return null;
     });
@@ -110,11 +106,8 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
     OnUpdateChildInfoCreateAccEvent event,
     Emitter<CreateAccountState> emit,
   ) async {
-    if (state.status != CreateAccountStatus.onShowMessage) {
-      emit(state.copyWith(onLoading: true));
-      await _sendChildInfo(emit, isUpdate: true);
-      emit(state.copyWith(onLoading: null));
-    }
+    emit(state.copyWith(status: CreateAccountStatus.onShowDialog));
+    await _sendChildInfo(emit, isUpdate: true);
   }
 
   Future<void> _sendChildInfo(Emitter<CreateAccountState> emit, {bool isUpdate = false}) async {
@@ -125,11 +118,11 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
       weight: double.parse(state.weight.replaceAll(' kg', '')),
     )
         .then((result) async {
+      emit(state.copyWith(status: CreateAccountStatus.onHideDialog));
       if (result.errorMessage == null) {
         emit(state.copyWith(
           status: CreateAccountStatus.onShowMessage,
           message: result.data!,
-          onLoading: false,
         ));
         await Future.delayed(const Duration(milliseconds: 1700), () {
           emit(state.copyWith(
@@ -142,7 +135,6 @@ class CreateAccountBloc extends Bloc<CreateAccountEvent, CreateAccountState> {
         emit(state.copyWith(
           status: CreateAccountStatus.onShowMessage,
           message: result.errorMessage!,
-          onLoading: false,
         ));
       }
     });

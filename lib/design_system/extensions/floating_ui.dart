@@ -6,6 +6,7 @@ import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 extension FloatingUi on BuildContext {
   void showModalPopUp({required Widget child}) {
@@ -59,6 +60,15 @@ extension FloatingUi on BuildContext {
           behavior: SnackBarBehavior.floating,
         ),
       );
+  }
+
+  void showToast(String msg, {Toast? toastLength}) {
+    Fluttertoast.showToast(
+      msg: msg,
+      textColor: themeColors.surface,
+      backgroundColor: themeColors.onSurface.withOpacity(0.9),
+      toastLength: toastLength,
+    );
   }
 
   void checkConnectivity(VoidCallback? onConnectionAvailable) {

@@ -72,7 +72,7 @@ class ErkatoyIconButton extends StatelessWidget {
           text: text,
           textColor: textColor,
           textSize: textSize,
-          fontWeight: boldStyledTextEnabled ? FontWeight.bold : null,
+          fontWeight: boldStyledTextEnabled ? FontWeight.w500 : null,
         ),
       ),
     );

@@ -1,6 +1,13 @@
 part of 'create_account_bloc.dart';
 
-enum CreateAccountStatus { pure, onSuccessfulCreated, onSuccessfulUpdated, onShowMessage }
+enum CreateAccountStatus {
+  pure,
+  onSuccessfulCreated,
+  onSuccessfulUpdated,
+  onShowMessage,
+  onShowDialog,
+  onHideDialog,
+}
 
 class CreateAccountState extends Equatable {
   const CreateAccountState({

@@ -91,4 +91,7 @@ class HomeRepositoryImpl implements HomeRepository {
       return CryReasonResult(errorMessage: apiResult.detail!);
     });
   }
+
+  @override
+  Future<int> clearChatHistory() => _localSource.deleteAllChats();
 }

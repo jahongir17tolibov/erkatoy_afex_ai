@@ -48,7 +48,7 @@ class _ThreeDotsAnimatedLoadingState extends State<ThreeDotsAnimatedLoading>
               height: 6,
               margin: getPaddingAll4,
               decoration: BoxDecoration(
-                color: context.themeColors.onSecondary,
+                color: context.themeColors.onSurface,
                 shape: BoxShape.circle,
               ),
             ),

@@ -19,6 +19,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }) : super(const ChatState()) {
     on<OnGetCachedChatsEvent>(_onGetCachedChatsEvent);
     on<OnRequestToAiChatEvent>(_onRequestToAiChatEvent);
+    on<OnCopyToClipboardChatEvent>(_onCopyToClipboardChatEvent);
   }
 
   final GetCachedChatsUseCase getCachedChatsUseCase;
@@ -75,4 +76,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final DateTime now = DateTime.now();
     return DateFormat('HH:mm').format(now);
   }
+
+  FutureOr<void> _onCopyToClipboardChatEvent(
+    OnCopyToClipboardChatEvent event,
+    Emitter<ChatState> emit,
+  ) async {}
 }

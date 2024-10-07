@@ -9,3 +9,9 @@ final class OnRequestToAiChatEvent extends ChatEvent {
 
   final String message;
 }
+
+final class OnCopyToClipboardChatEvent extends ChatEvent {
+  OnCopyToClipboardChatEvent(this.text);
+
+  final String text;
+}

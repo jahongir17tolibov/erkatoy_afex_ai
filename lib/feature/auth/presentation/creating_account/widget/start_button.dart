@@ -16,16 +16,19 @@ class StartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateAccountBloc, CreateAccountState>(
       builder: (context, state) {
-        printOnDebug('$phone with $pass');
         final bool buttonState = (state.gender != null) &&
             state.weight.isNotEmpty &&
             (state.birthdayDate != null) &&
-            context.getConnectivity;
+            context.getConnectivity &&
+            state.isValid;
         return Padding(
           padding: getPaddingAll20,
           child: ErkatoyButton(
-            onPressed: buttonState
-                ? () {
+            onPressed: !buttonState ||
+                    state.status == CreateAccountStatus.onSuccessfulCreated ||
+                    state.status == CreateAccountStatus.onSuccessfulUpdated
+                ? null
+                : () {
                     context.unFocusingKeyboard(() async {
                       await Future.delayed(const Duration(milliseconds: 500), () {
                         context.read<CreateAccountBloc>().add(phone.isNotEmpty
@@ -33,8 +36,7 @@ class StartButton extends StatelessWidget {
                             : OnUpdateChildInfoCreateAccEvent());
                       });
                     });
-                  }
-                : null,
+                  },
             text: phone.isNotEmpty ? 'Qani boshladik unda' : 'Saqlash',
             buttonHeight: 48,
             textColor: context.themeColors.onPrimary,

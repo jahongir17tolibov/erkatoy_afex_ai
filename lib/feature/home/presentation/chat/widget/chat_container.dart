@@ -1,5 +1,6 @@
 import 'package:erkatoy_afex_ai/core/base/base_extensions.dart';
 import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
+import 'package:erkatoy_afex_ai/core/constants/app_constants.dart';
 import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class ChatContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentThemeMode = Theme.of(context).brightness;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,18 +31,27 @@ class ChatContainer extends StatelessWidget {
             crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: <Widget>[
               Container(
-                padding: getPaddingAll12,
+                padding: getPaddingAll10,
                 decoration: BoxDecoration(
-                  color: isUser
-                      ? context.themeColors.onSurface.withOpacity(0.2)
-                      : context.themeColors.secondary,
-                  borderRadius: getBorderAll16,
+                  color: !isUser ? context.themeColors.onSurface.withOpacity(0.1) : null,
+                  gradient: isUser ? _gradientBckg(currentThemeMode == Brightness.dark) : null,
+                  borderRadius: BorderRadius.only(
+                    topLeft: getCircularRadius(16),
+                    topRight: getCircularRadius(16),
+                    bottomLeft: getCircularRadius(isUser ? 16 : 0),
+                    bottomRight: getCircularRadius(isUser ? 0 : 16),
+                  ),
                 ),
                 child: Text.rich(
                   message.parseMarkdown,
                   style: TextStyle(
-                    fontSize: 16.textSize(context),
-                    color: isUser ? context.themeColors.onSurface : context.themeColors.onSecondary,
+                    fontFamily: AppConstants.appFontStyle,
+                    fontSize: 14.textSize(context),
+                    color: isUser
+                        ? currentThemeMode == Brightness.dark
+                            ? context.themeColors.surface
+                            : context.themeColors.onSurface
+                        : context.themeColors.onSurface,
                   ),
                 ),
               ),
@@ -58,6 +69,16 @@ class ChatContainer extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  LinearGradient _gradientBckg(bool isDark) {
+    const Color topColor = Color(0xFFFBFF3D);
+    const Color bottomColor = Color(0xFF6CF8AB);
+    return const LinearGradient(
+      colors: [topColor, bottomColor],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
     );
   }
 }

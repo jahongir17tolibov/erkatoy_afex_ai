@@ -19,7 +19,6 @@ class WeightInput extends StatelessWidget {
     return BlocSelector<CreateAccountBloc, CreateAccountState, String>(
       selector: (state) => state.weight,
       builder: (context, weight) {
-        if (weight.isNotEmpty) controller.text = weight;
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,

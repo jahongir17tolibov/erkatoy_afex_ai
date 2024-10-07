@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/entity/health.dart';
 import 'package:erkatoy_afex_ai/feature/home/domain/use_case/get_health_tips_use_case.dart';
 
@@ -25,8 +26,7 @@ class HealthBloc extends Bloc<HealthEvent, HealthState> {
       if (result.errorMessage == null) {
         emit(state.copyWith(status: HealthStatus.onSuccess, healthTipsList: result.data!));
       } else {
-        emit(state.copyWith(status: HealthStatus.onError));
-        emit(state.copyWith(status: HealthStatus.onShowMessage, message: result.errorMessage!));
+        emit(state.copyWith(status: HealthStatus.onError, message: result.errorMessage!));
       }
     });
   }

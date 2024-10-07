@@ -17,7 +17,9 @@ class ProvideApplication extends StatelessWidget {
         BlocProvider<SettingsBloc>(create: (_) => getIt<SettingsBloc>()..add(OnGetSettingsEvent())),
       ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
-        builder: (context, state) => child.call(state.darkModeEnabled)
+        builder: (context, state) {
+          return child.call(state.darkModeEnabled);
+        }
         // MediaQuery(
         // data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
         // child: child.call(state.darkModeEnabled),

@@ -21,12 +21,17 @@ class DioExceptionHandler implements Exception {
         errorMessage = _handleStatusCode(dioException.response?.statusCode);
         break;
       case DioExceptionType.unknown:
-        if (dioException.message!.contains('SocketException')) {
-          errorMessage = 'No Internet.';
-          break;
+        {
+          if (dioException.message != null) {
+            if (dioException.message!.contains('SocketException')) {
+              errorMessage = 'No Internet.';
+              break;
+            }
+            errorMessage = 'Unexpected error occurred.';
+            break;
+          }
         }
-        errorMessage = 'Unexpected error occurred.';
-        break;
+
       default:
         errorMessage = 'Something went wrong';
         break;

@@ -19,13 +19,13 @@ class PageIndicator extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 500),
-                  width: index == state.pageIndex ? 32 : 16,
-                  height: 8,
+                  width: 10,
+                  height: 10,
                   decoration: BoxDecoration(
                     color: index == state.pageIndex
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(32),
+                        : Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                    shape: BoxShape.circle,
                   ),
                 ),
               ),

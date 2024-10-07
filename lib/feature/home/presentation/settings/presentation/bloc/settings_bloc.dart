@@ -2,16 +2,20 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/hive_constants.dart';
 import 'package:erkatoy_afex_ai/core/provider/local/hive_local_storage.dart';
+import 'package:erkatoy_afex_ai/feature/home/domain/use_case/clear_chat_history_use_case.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'settings_event.dart';
+
 part 'settings_state.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc({required this.localStorage}) : super(const SettingsState()) {
+  SettingsBloc({
+    required this.localStorage,
+    required this.clearChatHistoryUseCase,
+  }) : super(const SettingsState()) {
     on<OnGetSettingsEvent>(_onGetSettingsEvent);
     on<OnSwitchAppThemeSettingsEvent>(_onSwitchAppThemeSettingsEvent);
     on<OnSwitchNotificationSettingsEvent>(_onSwitchNotificationSettingsEvent);
@@ -20,6 +24,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   final HiveLocalStorage localStorage;
+  final ClearChatHistoryUseCase clearChatHistoryUseCase;
 
   FutureOr<void> _onGetSettingsEvent(
     OnGetSettingsEvent event,
@@ -42,8 +47,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     OnSwitchAppThemeSettingsEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    final theme = await _getAppThemeState();
-    printOnDebug(theme);
     await _saveAppTheme(!state.darkModeEnabled).whenComplete(() {
       emit(state.copyWith(darkModeEnabled: !state.darkModeEnabled));
     });
@@ -67,6 +70,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     OnLogOutUserSettingEvent event,
     Emitter<SettingsState> emit,
   ) async {
+    await clearChatHistoryUseCase.execute();
     await _deleteAuthKey().whenComplete(() async {
       final authKey = await _getAuthKey();
       if (authKey == null) {

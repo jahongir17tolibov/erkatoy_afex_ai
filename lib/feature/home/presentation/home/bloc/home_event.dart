@@ -4,6 +4,8 @@ class HomeEvent {}
 
 final class OnGetCurrentActivityHomeEvent extends HomeEvent {}
 
-final class OnPressRecordVoiceHomeEvent extends HomeEvent {}
+final class OnBottomNavChangedHomeEvent extends HomeEvent {
+  OnBottomNavChangedHomeEvent(this.index);
 
-final class OnListenRecordedVoiceHomeEvent extends HomeEvent {}
+  final int index;
+}

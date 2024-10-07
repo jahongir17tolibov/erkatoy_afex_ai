@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/hive_constants.dart';
 import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
 import 'package:erkatoy_afex_ai/core/provider/local/hive_local_storage.dart';
@@ -79,7 +76,6 @@ class _SplashScreenState extends State<SplashScreen> {
           key: HiveConstants.onBoardingKey,
         ) ??
         false;
-    printOnDebug(llll);
     return llll;
   }
 }

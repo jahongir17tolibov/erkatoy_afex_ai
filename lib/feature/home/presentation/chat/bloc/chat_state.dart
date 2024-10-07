@@ -1,6 +1,6 @@
 part of 'chat_bloc.dart';
 
-enum ChatStatus { pure, onLoading, onSuccess, onError }
+enum ChatStatus { pure, onLoading, onSuccess, onError, onShowMessage }
 
 class ChatState extends Equatable {
   const ChatState({

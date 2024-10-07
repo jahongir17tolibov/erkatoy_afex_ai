@@ -52,7 +52,7 @@ class AccountCard extends StatelessWidget {
 
   void _onFormChanged(BuildContext context) {
     if (weightEditingController.text.isNotEmpty) {
-      final isValid = formKey.currentState!.validate();
+      final isValid = formKey.currentState?.validate() ?? false;
       context.read<CreateAccountBloc>().add(OnValidateFormCreateAccountEvent(isValid));
     }
   }

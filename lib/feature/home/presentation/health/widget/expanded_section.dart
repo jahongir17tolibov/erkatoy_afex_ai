@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ExpandedSection extends StatefulWidget {
@@ -19,6 +18,7 @@ class _ExpandedSectionState extends State<ExpandedSection> with SingleTickerProv
   void initState() {
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
     _animation = CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn);
+    if (widget.isExpanded) _controller.forward();
     super.initState();
   }
 

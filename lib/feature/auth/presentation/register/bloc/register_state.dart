@@ -1,6 +1,6 @@
 part of 'register_bloc.dart';
 
-enum RegisterStatus { pure, onSuccessful, onShowMessage }
+enum RegisterStatus { pure, onSuccessful, onShowMessage, onShowDialog, onHideDialog }
 
 class RegisterState extends Equatable {
   const RegisterState({
@@ -12,7 +12,6 @@ class RegisterState extends Equatable {
     this.obscureState = true,
     this.reObscureState = true,
     this.message,
-    this.onLoading,
   });
 
   final RegisterStatus status;
@@ -23,7 +22,6 @@ class RegisterState extends Equatable {
   final bool obscureState;
   final bool reObscureState;
   final String? message;
-  final bool? onLoading;
 
   RegisterState copyWith({
     RegisterStatus? status,
@@ -34,7 +32,6 @@ class RegisterState extends Equatable {
     bool? obscureState,
     bool? reObscureState,
     String? message,
-    bool? onLoading,
   }) =>
       RegisterState(
         status: status ?? this.status,
@@ -45,7 +42,6 @@ class RegisterState extends Equatable {
         obscureState: obscureState ?? this.obscureState,
         reObscureState: reObscureState ?? this.reObscureState,
         message: message ?? this.message,
-        onLoading: onLoading ?? this.onLoading,
       );
 
   @override
@@ -57,7 +53,6 @@ class RegisterState extends Equatable {
         formIsValidate,
         obscureState,
         reObscureState,
-        message,
-        onLoading
+        message
       ];
 }

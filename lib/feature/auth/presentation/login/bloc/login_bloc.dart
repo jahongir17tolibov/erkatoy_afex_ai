@@ -31,30 +31,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     OnLoginBtnPressedEvent event,
     Emitter<LoginState> emit,
   ) async {
-    if (state.status != LoginStatus.onShowMessage) {
-      emit(state.copyWith(onLoading: true));
-      await loginUseCase
-          .execute(phone: state.phoneNumber, password: state.password)
-          .then((result) async {
-        if (result.errorMessage == null) {
-          emit(state.copyWith(
-            status: LoginStatus.onShowMessage,
-            message: '${state.phoneNumber} raqam bilan kirdingiz!',
-            onLoading: false,
-          ));
-          await Future.delayed(const Duration(milliseconds: 1700), () {
-            emit(state.copyWith(status: LoginStatus.onSuccessful));
-          });
-        } else {
-          emit(state.copyWith(
-            status: LoginStatus.onShowMessage,
-            message: result.errorMessage,
-            onLoading: false,
-          ));
-        }
-      });
-      emit(state.copyWith(onLoading: null));
-    }
+    emit(state.copyWith(status: LoginStatus.onShowDialog));
+    await loginUseCase
+        .execute(phone: state.phoneNumber, password: state.password)
+        .then((result) async {
+      emit(state.copyWith(status: LoginStatus.onHideDialog));
+      if (result.errorMessage == null) {
+        emit(state.copyWith(
+          status: LoginStatus.onShowMessage,
+          message: '${state.phoneNumber} raqam bilan kirdingiz!',
+        ));
+        await Future.delayed(const Duration(milliseconds: 1700), () {
+          emit(state.copyWith(status: LoginStatus.onSuccessful));
+        });
+      } else {
+        emit(state.copyWith(
+          status: LoginStatus.onShowMessage,
+          message: result.errorMessage,
+        ));
+      }
+    });
+    emit(state.copyWith(status: LoginStatus.pure));
   }
 
   FutureOr<void> _onInputPhoneLoginEvent(

@@ -49,18 +49,20 @@ class TextView extends StatelessWidget {
         text,
         overflow: textOverflow,
         maxLines: maxLines,
-        style: TextStyle(
-          fontFamily: AppConstants.appFontStyle,
-          fontSize: textSize,
-          color: textColor,
-          fontWeight: fontWeight,
-          fontStyle: fontStyle,
-          decoration: textDecorations.decoration,
-          decorationColor: textDecorations.color,
-          letterSpacing: letterSpacing,
-        ),
+        style: _appTextStyle,
         textAlign: textAlign,
         textScaler: fixedTextSize ? TextScaler.noScaling : null,
+      );
+
+  TextStyle get _appTextStyle => TextStyle(
+        fontFamily: AppConstants.appFontStyle,
+        fontSize: textSize,
+        color: textColor,
+        fontWeight: fontWeight,
+        fontStyle: fontStyle,
+        decoration: textDecorations.decoration,
+        decorationColor: textDecorations.color,
+        letterSpacing: letterSpacing,
       );
 }
 

@@ -1,5 +1,6 @@
-import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/core/constants/images_constants.dart';
+import 'package:erkatoy_afex_ai/core/service/permission_service.dart';
+import 'package:erkatoy_afex_ai/design_system/components/svg_image_view.dart';
 import 'package:erkatoy_afex_ai/design_system/components/text_view.dart';
 import 'package:erkatoy_afex_ai/design_system/extensions/ui_extensions.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:go_router/go_router.dart';
 
 import 'bloc/zen_bloc.dart';
 import 'widget/audio_controls_row.dart';
-import 'widget/audio_duration_text.dart';
 
 class ZenModeScreen extends StatefulWidget {
   const ZenModeScreen({super.key});
@@ -31,6 +31,7 @@ class _ZenModeScreenState extends State<ZenModeScreen> with SingleTickerProvider
 
   @override
   void initState() {
+    PermissionService.audio();
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
@@ -54,7 +55,7 @@ class _ZenModeScreenState extends State<ZenModeScreen> with SingleTickerProvider
           animation: _animation,
           builder: (context, child) => Transform.scale(scale: _animation.value, child: child),
           child: Image.asset(
-            ImagesConstants.zenMode2Bckg,
+            ImagesConstants.childWithBearImg,
             width: 1.screenWidth(context),
             height: 1.screenHeight(context),
             fit: BoxFit.cover,
@@ -67,31 +68,25 @@ class _ZenModeScreenState extends State<ZenModeScreen> with SingleTickerProvider
             centerTitle: true,
             automaticallyImplyLeading: false,
             leading: IconButton(
-                onPressed: () {
-                  context.pop();
-                },
-                style: ButtonStyle(
-                  shape: WidgetStatePropertyAll(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      side: const BorderSide(color: Colors.orangeAccent),
-                    ),
-                  ),
-                ),
-                icon: const Icon(Icons.arrow_back_rounded, color: Colors.orangeAccent)),
-            title: const TextView(text: 'Uyqu rejimi', textColor: Colors.orangeAccent),
+              onPressed: () {
+                context.pop();
+              },
+              icon: const SvgImageView(ImagesConstants.backIconRounded, color: Colors.white),
+            ),
+            title: const TextView.boldStyle(
+              text: 'Uyqu rejimi',
+              textColor: Colors.white,
+              textSize: 18,
+            ),
           ),
-          body: Padding(
-            padding: getPaddingAll20,
+          body: const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Spacer(),
-                const AudioDurationText(),
-                getHeightSize10,
-                const AudioControlsRow(),
-                SizedBox(height: 0.1.screenHeight(context)),
+                Spacer(),
+                AudioControlsRow(),
               ],
             ),
           ),

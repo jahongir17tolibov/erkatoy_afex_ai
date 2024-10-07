@@ -1,5 +1,5 @@
-import 'package:erkatoy_afex_ai/core/base/base_functions.dart';
 import 'package:erkatoy_afex_ai/design_system/components/scale_on_press_button.dart';
+import 'package:erkatoy_afex_ai/design_system/components/svg_image_view.dart';
 import 'package:flutter/material.dart';
 
 class AudioControlIcons extends StatelessWidget {
@@ -12,16 +12,7 @@ class AudioControlIcons extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaleOnPress(
       onTap: onPressed,
-      child: Padding(
-        padding: getPaddingAll16,
-        child: Image.asset(
-          assetPath,
-          width: 48,
-          height: 48,
-          fit: BoxFit.cover,
-          color: Colors.orangeAccent,
-        ),
-      ),
+      child: SvgImageView(assetPath, width: 48, height: 48),
     );
   }
 }

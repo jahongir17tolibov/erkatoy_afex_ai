@@ -18,11 +18,15 @@ class ChatLoading extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Container(
-                    margin: const EdgeInsets.only(left: 16, bottom: 16),
                     padding: getPaddingAll10,
                     decoration: BoxDecoration(
-                      color: context.themeColors.secondary,
-                      borderRadius: getBorderAll16,
+                      color: context.themeColors.onSurface.withOpacity(0.1),
+                      borderRadius: BorderRadius.only(
+                        topLeft: getCircularRadius(16),
+                        topRight: getCircularRadius(16),
+                        bottomLeft: getCircularRadius(0),
+                        bottomRight: getCircularRadius(16),
+                      ),
                     ),
                     child: const ThreeDotsAnimatedLoading(),
                   ),

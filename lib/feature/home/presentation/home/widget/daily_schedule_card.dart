@@ -8,54 +8,42 @@ import 'package:erkatoy_afex_ai/feature/home/presentation/home/bloc/home_bloc.da
 import 'package:erkatoy_afex_ai/feature/home/presentation/home/widget/home_cards_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DailyScheduleCard extends StatelessWidget {
   const DailyScheduleCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<HomeBloc, HomeState, String>(
-      selector: (state) => state.currentActivity,
+    return BlocSelector<HomeBloc, HomeState, List<String>>(
+      selector: (state) => [state.currentTime, state.currentActivity],
       builder: (context, currentActivity) {
         return ScaleOnPress(
           onTap: () {
-            onNavigateDailySchedule(context, currentActivity);
+            onNavigateDailySchedule(context, currentActivity[0]);
           },
           child: HomeCardsContainer(
+            title: 'Kunlik jadval',
+            extraTitle: 'Bugungi',
+            iconAsset: ImagesConstants.calendarColoredIcon,
+            image: ImagesConstants.homeDailyScheduleImg,
+            backgroundColor: context.themeColors.secondary,
+            onBackgroundColor: context.themeColors.onSecondary,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    SvgPicture.asset(
-                      ImagesConstants.dailyScheduleIconSvg,
-                      width: 32,
-                      height: 32,
-                      colorFilter:
-                          ColorFilter.mode(context.themeColors.onSecondary, BlendMode.srcIn),
-                    ),
-                    getWidthSize16,
-                    TextView.boldStyle(
-                      text: 'Kunlik jadval',
-                      textSize: 20.textSize(context),
-                      textColor: context.themeColors.onSecondary,
-                    ),
-                  ],
+                TextView(
+                  text: currentActivity[0],
+                  textColor: context.themeColors.onSecondary,
+                  fontWeight: FontWeight.w500,
+                  textSize: 12,
                 ),
-                getHeightSize20,
-                Container(
-                  width: 1.screenWidth(context),
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: context.themeColors.surface.withOpacity(0.8),
-                    borderRadius: getBorderAll16,
-                  ),
-                  child: TextView(
-                    text: currentActivity,
-                    textSize: 14.textSize(context),
-                    textColor: context.themeColors.onSurface,
-                  ),
-                )
+                getHeightSize4,
+                TextView(
+                  text: currentActivity[1],
+                  textSize: 12,
+                  fontWeight: FontWeight.w500,
+                  textColor: context.themeColors.onSurface.withOpacity(0.5),
+                ),
               ],
             ),
           ),
@@ -67,13 +55,11 @@ class DailyScheduleCard extends StatelessWidget {
   void onNavigateDailySchedule(BuildContext context, String currentActivity) {
     String? argument;
     final List<String> parts = currentActivity.substring(0, 5).split(':');
-    printOnDebug(parts);
     if (parts.length > 1) {
       final int hours = int.parse(parts[0]);
       final int minutes = int.parse(parts[1]);
       argument = minutes > 30 ? '$hours:30' : '$hours:00';
     }
-    printOnDebug(argument);
     DailyScheduleScreen.open(context, currentTime: argument ?? '');
   }
 }

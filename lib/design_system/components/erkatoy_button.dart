@@ -85,6 +85,8 @@ class ErkatoyButton extends StatelessWidget {
       minWidth: buttonWidth,
       height: buttonHeight,
       elevation: elevation,
+      highlightElevation: elevation,
+      hoverElevation: elevation,
       color: isOutlined ? context.themeColors.surface : buttonColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
@@ -109,7 +111,7 @@ class ErkatoyButton extends StatelessWidget {
                   text: text,
                   textColor: textColor,
                   textSize: textSize,
-                  fontWeight: boldStyledTextEnabled ? FontWeight.bold : null,
+                  fontWeight: boldStyledTextEnabled ? FontWeight.w500 : null,
                 ),
                 icon!,
               ],

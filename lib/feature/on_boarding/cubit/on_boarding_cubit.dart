@@ -16,30 +16,31 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
       OnBoardingModel(
         image: ImagesConstants.onBoardingImg1,
         title: 'Xush Kelibsiz',
-        subtitle: 'Yangi tug`ilgan chaqaloqni to`g`ri parvarishlash haqida maslahatlar',
+        subtitle:
+            "Erkatoyga Xush Kelibsiz! Farzandingiz parvarishi va salomatligi uchun aqlli yordamchi endi qo'lingizda.",
       ),
       OnBoardingModel(
         image: ImagesConstants.onBoardingImg2,
         title: 'AI chatbot',
         subtitle:
-        'Chaqaloq salomatligini yaxshilash uchun foydali maslahatlar, kasalliklar haqida ma`lumotlar va kunlik jadval',
+            'Nafaqat chaqaloqlar balki odam salomatligi haqida barcha savollarga javob beradigan tezkor suniy intellekt chatboti',
       ),
       OnBoardingModel(
         image: ImagesConstants.onBoardingImg3,
         title: 'Parvarish',
         subtitle:
-        'Nafaqat chaqaloqlar balki odam salomatligi haqida barcha savollarga javob beradigan tezkor suniy intellekt chatboti',
+            "Erkatoy sizning eng yaxshi yordamchingiz: farzandingizning kundalik parvarishi va sog'ligi uchun maxsus tavsiyalar",
       ),
       OnBoardingModel(
         image: ImagesConstants.onBoardingImg4,
         title: 'Salomatlik',
         subtitle:
-        'Nafaqat chaqaloqlar balki odam salomatligi haqida barcha savollarga javob beradigan tezkor suniy intellekt chatboti',
+            "Farzandingiz sog'lig'iga e'tiborli bo'ling. Erkatoy sizga kasallik belgilari va sog'liq bo'yicha maslahatlar beradi.",
       ),
       OnBoardingModel(
         image: ImagesConstants.onBoardingImg5,
         title: '',
-        subtitle: 'Nafaqat chaqaloqlar balki odam salomatligi haqida barcha savollarga javob beradigan tezkor suniy intellekt chatboti',
+        subtitle: "Birgalikda farzandingiz uchun eng yaxshi parvarishni ta'minlaymiz.",
       ),
     ];
     emit(state.copyWith(onBoardingDataList: listOfItems));

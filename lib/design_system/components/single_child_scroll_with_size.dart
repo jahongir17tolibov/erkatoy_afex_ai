@@ -18,12 +18,14 @@ class SingleChildScrollWithSize extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: padding,
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          minHeight:
-              1.screenHeight(context) - statusBarHeight - (screenWithAppBar ? kToolbarHeight : 0),
+          minHeight: 0.7.screenHeight(context) -
+              statusBarHeight -
+              kBottomNavigationBarHeight -
+              (screenWithAppBar ? kToolbarHeight : 0),
           minWidth: 1.screenWidth(context),
         ),
         child: IntrinsicHeight(child: child),

@@ -50,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: BlocListener<RegisterBloc, RegisterState>(
         listener: (context, state) {
           if (state.status == RegisterStatus.onShowMessage) {
-            context.showSnackBar(state.message!);
+            context.showToast(state.message!);
           } else if (state.status == RegisterStatus.onSuccessful) {
             CreatingAccountScreen.openReplace(
               context,
@@ -59,10 +59,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             );
           }
 
-          if (state.onLoading != null) {
-            state.onLoading!
-                ? AdaptiveLoadingView.showLoadingDialog(context)
-                : AdaptiveLoadingView.hideLoadingDialog(context);
+          if (state.status == RegisterStatus.onShowDialog) {
+            AdaptiveLoadingView.showLoadingDialog(context);
+          } else if (state.status == RegisterStatus.onHideDialog) {
+            AdaptiveLoadingView.hideLoadingDialog(context);
           }
         },
         child: Column(
